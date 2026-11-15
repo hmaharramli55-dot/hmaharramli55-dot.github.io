@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Huseyn Maharramli — AI Engineer</title>
+<meta name="description" content="Portfolio of Huseyn Maharramli, a Computer Science student at ADA University working in machine learning and data science. Projects, results and experience.">
+<meta name="author" content="Huseyn Maharramli">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Huseyn Maharramli — AI Engineer">
+<meta property="og:description" content="Machine learning and data science projects with measured results, by a Computer Science student at ADA University.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add("js")</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="ensemble.js" defer></script>
+<script src="demo.js" defer></script>
+<script src="script.js" defer onerror="document.documentElement.classList.remove('js')"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Huseyn Maharramli",
+  "description": "Computer Science student at ADA University and AI engineer working in machine learning and data science.",
+  "email": "mailto:hmaharramli55@gmail.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Baku", "addressCountry": "AZ" },
+  "affiliation": { "@type": "CollegeOrUniversity", "name": "ADA University" },
+  "knowsAbout": ["Machine learning", "Data science", "Python", "scikit-learn", "pandas", "NumPy", "Statistics"],
+  "sameAs": [
+    "https://github.com/hmaharramli55-dot",
+    "https://www.linkedin.com/in/huseyn-maharramli-18a904336/"
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="Huseyn Maharramli, back to top">Huseyn<span class="brand-last"> Maharramli</span></a>
+    <nav class="site-nav" aria-label="Sections">
+      <a class="nav-about" href="#about">About</a>
+      <a href="#projects">Work</a>
+      <a href="#journey">Journey</a>
+      <a href="#skills">Skills</a>
+      <a class="nav-cta" href="#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dark theme" aria-pressed="false">
+      <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================== Hero ============================== -->
+  <section class="hero tone-dark" id="top" aria-labelledby="hero-title">
+    <div class="wrap">
+      <p class="eyebrow"><span class="grad">AI Engineer</span></p>
+      <h1 id="hero-title">Huseyn Maharramli</h1>
+      <p class="hero-tagline">I like finding out what the data <span class="grad">actually shows</span>.</p>
+      <p class="hero-sub">Computer Science at ADA University in Baku. Machine learning and data science.</p>
+      <p class="actions">
+        <a class="button" href="#projects">See my work</a>
+        <a class="link-chevron" href="#contact">Get in touch</a>
+      </p>
+
+      <figure class="demo">
+        <div class="demo-stage">
+          <canvas class="demo-canvas" role="img" aria-label="Animated illustration of ensemble learning: the boundary between a blue class and an orange class starts blocky with one decision tree and turns smooth as up to 1,000 trees vote."></canvas>
+          <div class="demo-hud">
+            <p class="demo-count"><strong id="demo-count">1,000</strong> <span id="demo-unit">trees</span><span class="demo-count-more"> voting</span></p>
+            <input class="demo-range" id="demo-range" type="range" min="0" max="14" step="1" value="14" aria-label="Number of trees voting">
+            <button class="demo-replay" id="demo-replay" type="button" aria-label="Replay the animation">
+              <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M15.5 10a5.5 5.5 0 1 1-1.6-3.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14.6 3.2v3.3h-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <figcaption>A live illustration of the idea behind my ensemble project, running in your browser. Small decision trees, each trained on 100 random points from a synthetic two-class dataset, vote on every part of the picture. Blue and orange are the two classes, and the colours blend where the vote is split.<span class="demo-hint"> Drag the slider to change how many trees vote.</span></figcaption>
+      </figure>
+
+      <ul class="highlights">
+        <li><a href="#project-ensemble"><strong>87.3%</strong><span>Test accuracy when 1,000 small decision trees vote together.</span></a></li>
+        <li><a href="#project-regression"><strong><small>R²</small> 0.79</strong><span>From linear regression written from scratch in NumPy.</span></a></li>
+        <li><a href="#project-store"><strong>9,994</strong><span>Store orders analysed to show where discounts turn profit into loss.</span></a></li>
+        <li><a href="#project-ada-run"><strong>30</strong><span>ADA programmes, with courses and quizzes, inside a 3D browser game.</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== About ============================= -->
+  <section class="section" id="about" aria-labelledby="about-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow"><span class="grad">About</span></p>
+        <h2 id="about-title">Computer Science student. AI engineer.</h2>
+      </header>
+      <div class="about-grid">
+        <div class="prose reveal">
+          <p>I'm a Computer Science student at ADA University who enjoys working with data and figuring out what it shows. In summer 2026 I completed a data science internship at DevJoint, where I cleaned messy datasets, ran hypothesis tests, and built regression and classification models with scikit-learn, finishing as a Top Performer with Honors.</p>
+          <p>After that I was selected, through a two-stage assessment, for the fully funded AI Engineering Program at AI Academy. For my Machine Learning course I coded linear and logistic regression from scratch and built a decision-tree ensemble, and I'm an active member of the ADA AI Club.</p>
+          <p>In spring 2027 I'll spend a semester at Vytautas Magnus University in Kaunas, Lithuania, on an Erasmus+ exchange. My goal is to grow into an AI Engineer.</p>
+        </div>
+        <dl class="facts reveal">
+          <div><dt>Based in</dt><dd>Baku, Azerbaijan</dd></div>
+          <div><dt>Studying</dt><dd>BSc Computer Science, ADA University</dd></div>
+          <div><dt>Focus</dt><dd>Machine learning and data science</dd></div>
+          <div><dt>Languages</dt><dd>Azerbaijani (native), English (B2)</dd></div>
+          <div><dt>Community</dt><dd>ADA AI Club</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= Projects =========================== -->
+  <section class="section section-alt" id="projects" aria-labelledby="projects-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow"><span class="grad">Work</span></p>
+        <h2 id="projects-title">Selected work.</h2>
+        <p class="section-intro">Four projects and a four-week internship track. Each one starts with a question and reports what the numbers said.</p>
+      </header>
+
+      <div class="bento">
+
+        <article class="project tile tile-7 reveal" id="project-ensemble">
+          <p class="tile-eyebrow">Machine Learning course · ADA University · 2026</p>
+          <h3>Ensemble Learning with Decision Trees</h3>
+          <p class="question">Can a thousand small trees out-vote one carefully tuned tree?</p>
+          <p class="finding">The majority vote reaches <strong>87.3%</strong> test accuracy, higher than the tuned single tree (85.95%) and the average small tree (80.6%).</p>
+          <figure class="fig">
+            <figcaption>Test accuracy by model</figcaption>
+            <ul class="meters">
+              <li class="meter" data-value="80.6" data-max="100">
+                <span class="meter-name">Average of the 1,000 small trees</span>
+                <span class="meter-value">80.6%</span>
+                <span class="meter-bar" aria-hidden="true"><span class="meter-fill" style="--v:80.6%"></span></span>
+              </li>
+              <li class="meter" data-value="85.95" data-max="100">
+                <span class="meter-name">Single tuned tree</span>
+                <span class="meter-value">85.95%</span>
+                <span class="meter-bar" aria-hidden="true"><span class="meter-fill" style="--v:85.95%"></span></span>
+              </li>
+              <li class="meter is-key" data-value="87.3" data-max="100">
+                <span class="meter-name">Majority vote of the 1,000 trees</span>
+                <span class="meter-value">87.3%</span>
+                <span class="meter-bar" aria-hidden="true"><span class="meter-fill" style="--v:87.3%"></span></span>
+              </li>
+            </ul>
+            <p class="fig-axis" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></p>
+            <p class="fig-note">The vote gains 1.35 points on the tuned tree and 6.7 on the average small tree.</p>
+          </figure>
+          <details class="more">
+            <summary>How I did it</summary>
+            <div class="more-body">
+              <p>I tuned a decision tree classifier with GridSearchCV, using 3-fold cross-validation over max depth, max leaf nodes and min samples split, on a 10,000-sample, two-class dataset.</p>
+              <p>Then I built a random-forest-style ensemble from scratch: 1,000 trees, each trained on a random 100-sample subset (ShuffleSplit) and combined by majority vote.</p>
+              <ul class="chips" aria-label="Tools used">
+                <li>Python</li><li>scikit-learn</li><li>NumPy</li><li>pandas</li><li>SciPy</li><li>Matplotlib</li><li>Jupyter</li>
+              </ul>
+            </div>
+          </details>
+          <p class="tile-links"><a class="link-chevron" href="https://github.com/hmaharramli55-dot/Ensemble-Learning-Decision-Trees" target="_blank" rel="noopener">Notebook and code on GitHub</a></p>
+        </article>
+
+        <article class="project tile tile-5 reveal" id="project-regression">
+          <p class="tile-eyebrow">Machine Learning course · ADA University · 2026</p>
+          <h3>Linear &amp; Logistic Regression from Scratch</h3>
+          <p class="question">Can I match scikit-learn with nothing but NumPy?</p>
+          <p class="finding">The linear model reaches <strong>R² ≈ 0.79</strong>, confirmed against scikit-learn's LinearRegression and a NumPy normal-equation solution. The logistic model reaches 89% accuracy, matching scikit-learn.</p>
+          <figure class="fig">
+            <figcaption>From-scratch models, each against its maximum</figcaption>
+            <ul class="meters">
+              <li class="meter is-key" data-value="0.79" data-max="1">
+                <span class="meter-name">R², car-price linear regression</span>
+                <span class="meter-value">≈ 0.79</span>
+                <span class="meter-bar" aria-hidden="true"><span class="meter-fill" style="--v:79%"></span></span>
+                <span class="meter-foot">out of 1.00 · confirmed against scikit-learn and the normal equation</span>
+              </li>
+              <li class="meter is-key" data-value="89" data-max="100">
+                <span class="meter-name">Accuracy, pass/fail logistic regression</span>
+                <span class="meter-value">89%</span>
+                <span class="meter-bar" aria-hidden="true"><span class="meter-fill" style="--v:89%"></span></span>
+                <span class="meter-foot">out of 100% · matches scikit-learn</span>
+              </li>
+            </ul>
+          </figure>
+          <details class="more">
+            <summary>How I did it</summary>
+            <div class="more-body">
+              <p>I implemented linear regression with NumPy alone (hypothesis, cost function, gradient descent) to predict car prices from mileage and model year on Turbo.az listings, after cleaning string and multi-currency data and applying z-score normalization.</p>
+              <p>I then built logistic regression from scratch (sigmoid, cross-entropy cost, reusable gradient descent) with min-max scaling to predict whether a student passes or fails, and plotted the fits, cost curves and decision boundary with Matplotlib.</p>
+              <ul class="chips" aria-label="Tools used">
+                <li>Python</li><li>NumPy</li><li>pandas</li><li>scikit-learn</li><li>Matplotlib</li><li>Jupyter</li>
+              </ul>
+            </div>
+          </details>
+          <p class="tile-links"><a class="link-chevron" href="https://github.com/hmaharramli55-dot/Linear-Logistic-Regression-from-Scratch" target="_blank" rel="noopener">Notebook and code on GitHub</a></p>
+        </article>
+
+        <article class="project tile tile-5 reveal" id="project-store">
+          <p class="tile-eyebrow">ADA University · 2026</p>
+          <h3>Store Performance Analysis</h3>
+          <p class="question">Where does a store actually make its money, and where does it lose it?</p>
+          <p class="finding">Orders discounted above 20% lose about <strong>$97 each</strong> on average, while orders with no discount earn about $67. My recommendation: limit heavy discounting.</p>
+          <figure class="fig">
+            <figcaption>Average profit per order, by discount</figcaption>
+            <ul class="meters diverging">
+              <li class="meter" data-value="67" data-max="100">
+                <span class="meter-name">No discount</span>
+                <span class="meter-value">+$67</span>
+                <span class="meter-bar" aria-hidden="true"><span class="meter-fill pos" style="--v:67%"></span></span>
+              </li>
+              <li class="meter" data-value="-97" data-max="100">
+                <span class="meter-name">Discount above 20%</span>
+                <span class="meter-value">−$97</span>
+                <span class="meter-bar" aria-hidden="true"><span class="meter-fill neg" style="--v:97%"></span></span>
+              </li>
+            </ul>
+            <p class="fig-axis" aria-hidden="true"><span>−$100</span><span>$0</span><span>+$100</span></p>
+            <p class="fig-note">Approximate averages from the 9,994-order dataset. Loss sits left of zero, profit right.</p>
+          </figure>
+          <details class="more">
+            <summary>How I did it</summary>
+            <div class="more-body">
+              <p>I analyzed 9,994 orders (about $2.3M in revenue, 2014–2017) from the Superstore dataset with pandas and NumPy, answering business questions on sales, profit, regions, customer segments and discounting, then summarized the findings for a store manager.</p>
+              <ul class="findings">
+                <li>Technology drives the most revenue and profit, while Tables, Bookcases and Supplies lose money.</li>
+                <li>The Central region has the highest average discount (24%) and the lowest profit margin (about 8%).</li>
+                <li>NumPy z-scores flag 247 outlier orders (2.47%).</li>
+              </ul>
+              <ul class="chips" aria-label="Tools used">
+                <li>Python</li><li>pandas</li><li>NumPy</li><li>Matplotlib</li><li>Jupyter</li>
+              </ul>
+            </div>
+          </details>
+          <p class="tile-links"><a class="link-chevron" href="https://github.com/hmaharramli55-dot/Linear-Logistic-Regression-from-Scratch/blob/main/store_performance_report_assignment_Huseyn_Maharramli.ipynb" target="_blank" rel="noopener">Analysis notebook on GitHub</a></p>
+        </article>
+
+        <article class="project tile tile-7 tile-game tone-dark reveal" id="project-ada-run">
+          <p class="tile-eyebrow">Personal project · 2026</p>
+          <h3>ADA Run, a 3D endless runner</h3>
+          <p class="question">An endless runner where the thing chasing you is a giant F.</p>
+          <p class="tile-text">A browser-based 3D endless runner set on the ADA University campus, playable on desktop and mobile with keyboard and swipe controls and no installation. It includes all 30 ADA bachelor's and master's programmes with their course lists and end-of-course quizzes. Obstacle patterns never block every lane, and the gaps grow as the speed increases.</p>
+          <ul class="chips" aria-label="Tools used">
+            <li>JavaScript</li><li>Three.js</li><li>HTML5</li><li>CSS</li>
+          </ul>
+          <p class="tile-links">
+            <a class="button button-small" href="https://hmaharramli55-dot.github.io/ADA-Run/" target="_blank" rel="noopener">Play in the browser</a>
+            <a class="link-chevron" href="https://github.com/hmaharramli55-dot/ADA-Run" target="_blank" rel="noopener">Code on GitHub</a>
+          </p>
+          <figure class="tile-shot">
+            <img src="assets/ada-run-gameplay-1280.jpg" srcset="assets/ada-run-gameplay-720.jpg 720w, assets/ada-run-gameplay-1280.jpg 1280w" sizes="(min-width: 1000px) 560px, 92vw" width="1280" height="720" loading="lazy" decoding="async" alt="Screenshot of ADA Run: a student character runs down a tiled boulevard between ADA University campus buildings, with the points counter and current course shown at the top.">
+          </figure>
+        </article>
+
+        <div class="tile tile-12 track-block reveal">
+          <p class="tile-eyebrow">DevJoint internship · Summer 2026</p>
+          <h3>Four weeks, four deliverables</h3>
+          <p class="track-intro">The weekly projects from my data science internship at DevJoint. Each one builds on the last, from raw data to a final report for a business partner.</p>
+          <ol class="track">
+            <li>
+              <p class="track-step">Week 1</p>
+              <h4><a href="https://github.com/hmaharramli55-dot/Data-Cleaning-Exploratory-Data-Analysis-" target="_blank" rel="noopener">Data Cleaning &amp; Exploratory Data Analysis</a></h4>
+              <p>Cleaned raw datasets, treated missing values and outliers, and visualized trends to guide later modeling steps.</p>
+              <p class="tools">Python · pandas · Seaborn</p>
+            </li>
+            <li>
+              <p class="track-step">Week 2</p>
+              <h4><a href="https://github.com/hmaharramli55-dot/Statistical-Analysis-Hypothesis-Testing-" target="_blank" rel="noopener">Statistical Analysis &amp; Hypothesis Testing</a></h4>
+              <p>Performed descriptive statistics and hypothesis tests on real-world style data to answer targeted business questions.</p>
+              <p class="tools">Python · pandas · SciPy</p>
+            </li>
+            <li>
+              <p class="track-step">Week 3</p>
+              <h4><a href="https://github.com/hmaharramli55-dot/Supervised-Learning-Model-with-Scikit-learn-" target="_blank" rel="noopener">Supervised Learning with scikit-learn</a></h4>
+              <p>Trained and evaluated regression and classification models using a structured ML workflow with train/test splits and cross-validation.</p>
+              <p class="tools">Python · scikit-learn · Matplotlib</p>
+            </li>
+            <li>
+              <p class="track-step">Week 4</p>
+              <h4><a href="https://github.com/hmaharramli55-dot/End-to-End-Machine-Learning-Pipeline-" target="_blank" rel="noopener">End-to-End Machine Learning Pipeline</a></h4>
+              <p>Built a full pipeline from raw data to a final business report, comparing several algorithms and tuning hyperparameters to select the best model.</p>
+              <p class="tools">Python · pandas · NumPy · scikit-learn</p>
+            </li>
+          </ol>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== Journey =========================== -->
+  <section class="section tone-dark" id="journey" aria-labelledby="journey-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow"><span class="grad">Journey</span></p>
+        <h2 id="journey-title">From Baku to Kaunas.</h2>
+        <p class="section-intro">Education and experience, newest first.</p>
+      </header>
+
+      <article class="entry entry-feature tile reveal" id="journey-erasmus">
+        <div class="entry-what">
+          <p class="entry-kind"><span class="badge badge-upcoming">Upcoming</span> Spring 2027 · Exchange</p>
+          <h3>Erasmus+ Exchange Semester</h3>
+          <p class="entry-org">Vytautas Magnus University · Kaunas, Lithuania</p>
+          <p>A semester abroad in Kaunas through the Erasmus+ programme, as an exchange student from ADA University.</p>
+        </div>
+        <div class="route" aria-hidden="true">
+          <svg viewBox="0 0 520 300" preserveAspectRatio="none" focusable="false">
+            <defs>
+              <linearGradient id="route-line" x1="453" y1="226" x2="116" y2="59" gradientUnits="userSpaceOnUse">
+                <stop offset="0" class="stop-4"/><stop offset="0.4" class="stop-3"/><stop offset="0.72" class="stop-2"/><stop offset="1" class="stop-1"/>
+              </linearGradient>
+              <pattern id="route-dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="currentColor" opacity="0.16"/></pattern>
+            </defs>
+            <rect width="520" height="300" fill="url(#route-dots)"/>
+            <path class="route-path" d="M453 226 Q330 40 116 59" pathLength="1" fill="none" stroke="url(#route-line)" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          </svg>
+          <span class="route-dot route-dot-from"></span>
+          <span class="route-dot route-dot-to"></span>
+          <p class="route-label route-from"><strong>Baku</strong><span>40.41° N, 49.87° E</span></p>
+          <p class="route-label route-to"><strong>Kaunas</strong><span>54.90° N, 23.90° E</span></p>
+        </div>
+      </article>
+
+      <div class="timeline">
+
+        <article class="entry reveal" id="journey-ai-academy">
+          <p class="entry-when">October 2026 – Present</p>
+          <div class="entry-what">
+            <p class="entry-kind"><span class="badge badge-now">Now</span> Program</p>
+            <h3>AI Engineering Program (Fully Funded)</h3>
+            <p class="entry-org">AI Academy</p>
+            <p>Selected for the fully funded program after passing a two-stage assessment.</p>
+          </div>
+        </article>
+
+        <article class="entry reveal" id="journey-devjoint">
+          <p class="entry-when">June – September 2026</p>
+          <div class="entry-what">
+            <p class="entry-kind">Internship</p>
+            <h3>Data Scientist Intern</h3>
+            <p class="entry-org">DevJoint · Baku, Azerbaijan</p>
+            <ul>
+              <li>Cleaned and preprocessed raw datasets, handling missing values and outliers, and uncovered early patterns through exploratory data analysis in Python.</li>
+              <li>Applied descriptive statistics and formal hypothesis testing (A/B test and survey data) to answer specific business questions.</li>
+              <li>Built, trained and evaluated regression and classification models with scikit-learn, using preprocessing and cross-validation for reliable results.</li>
+              <li>Developed an end-to-end ML pipeline: feature engineering, comparison of multiple algorithms, hyperparameter tuning and best-model selection.</li>
+              <li>Delivered a final report to a business partner and four weekly project deliverables, finishing as a Top Performer with Honors.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry reveal" id="journey-ada">
+          <p class="entry-when">September 2024 – June 2028 <span class="entry-when-note">(expected)</span></p>
+          <div class="entry-what">
+            <p class="entry-kind">Degree</p>
+            <h3>BSc in Computer Science</h3>
+            <p class="entry-org">ADA University · Baku, Azerbaijan</p>
+            <ul>
+              <li>Recognized on the ADA University Excellence List for high academic performance among Computer Science students.</li>
+              <li>Relevant coursework: Programming, Data Structures &amp; Algorithms, Statistics, Linear Algebra, Machine Learning Fundamentals.</li>
+              <li>Active member of the ADA AI Club, taking part in club activities and collaborative AI/ML projects.</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================== Skills =========================== -->
+  <section class="section" id="skills" aria-labelledby="skills-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow"><span class="grad">Skills</span></p>
+        <h2 id="skills-title">Toolkit.</h2>
+      </header>
+      <dl class="specs">
+        <div class="reveal">
+          <dt>Programming &amp; tools</dt>
+          <dd><ul class="chips">
+            <li>Python (advanced)</li><li>R</li><li>C/C++</li><li>JavaScript</li><li>Jupyter Notebook</li><li>Google Colab</li><li>VS Code</li><li>Git/GitHub</li><li>Markdown documentation</li>
+          </ul></dd>
+        </div>
+        <div class="reveal">
+          <dt>Machine learning</dt>
+          <dd><ul class="chips">
+            <li>scikit-learn</li><li>Regression</li><li>Classification</li><li>Decision Trees</li><li>Random Forest</li><li>Ensemble Methods</li><li>Feature Engineering</li><li>Cross-Validation</li><li>Hyperparameter Tuning (GridSearchCV)</li><li>Model Comparison &amp; Selection</li><li>Train/Test Splitting</li><li>Gradient Descent</li>
+          </ul></dd>
+        </div>
+        <div class="reveal">
+          <dt>Data analysis</dt>
+          <dd><ul class="chips">
+            <li>pandas</li><li>NumPy</li><li>Data Cleaning</li><li>Missing Value &amp; Outlier Handling</li><li>Exploratory Data Analysis (EDA)</li><li>GroupBy &amp; Aggregation</li><li>Z-score Outlier Detection</li><li>Array Operations</li>
+          </ul></dd>
+        </div>
+        <div class="reveal">
+          <dt>Statistics</dt>
+          <dd><ul class="chips">
+            <li>Descriptive Statistics</li><li>Hypothesis Testing</li><li>A/B Testing</li><li>Survey Data Analysis</li><li>SciPy</li>
+          </ul></dd>
+        </div>
+        <div class="reveal">
+          <dt>Visualization &amp; reporting</dt>
+          <dd><ul class="chips">
+            <li>Matplotlib</li><li>Seaborn</li><li>Business Reporting</li><li>Insight Extraction</li><li>Data-Driven Recommendations</li>
+          </ul></dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================ Recognition ========================= -->
+  <section class="section section-alt" id="recognition" aria-labelledby="recognition-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow"><span class="grad">Recognition</span></p>
+        <h2 id="recognition-title">Honors and awards.</h2>
+      </header>
+      <ul class="awards">
+        <li class="award tile reveal">
+          <svg class="award-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M20 4l3.6 12.4L36 20l-12.4 3.6L20 36l-3.6-12.4L4 20l12.4-3.6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <p class="award-when">October 2026</p>
+          <h3>Selected for the AI Engineering Program</h3>
+          <p>AI Academy. A fully funded place, awarded after a two-stage assessment.</p>
+        </li>
+        <li class="award tile reveal">
+          <svg class="award-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="20" cy="15" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14.5 22.5L12 36l8-4.5 8 4.5-2.5-13.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <p class="award-when">September 2026</p>
+          <h3>Top Performer with Honors</h3>
+          <p>DevJoint Data Science Internship. An Honors certificate for outstanding performance.</p>
+        </li>
+        <li class="award tile reveal">
+          <svg class="award-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M3 15l17-8 17 8-17 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 19v8c0 2.5 4.5 5 10 5s10-2.5 10-5v-8M37 15v9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p class="award-when">ADA University</p>
+          <h3>Excellence List</h3>
+          <p>Recognized for high academic performance among Computer Science students.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== Contact =========================== -->
+  <section class="section section-contact tone-dark" id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <h2 id="contact-title">Get in touch.</h2>
+      <p class="contact-lede">Have a question about one of these projects, or an idea where data and machine learning could help? I'd be glad to hear from you.</p>
+      <ul class="contact-list">
+        <li><a href="mailto:hmaharramli55@gmail.com">
+          <span class="contact-kind">Email</span>
+          <span class="contact-value">hmaharramli55@gmail.com</span>
+          <span class="contact-go">Write to me</span>
+        </a></li>
+        <li><a href="https://www.linkedin.com/in/huseyn-maharramli-18a904336/" target="_blank" rel="noopener">
+          <span class="contact-kind">LinkedIn</span>
+          <span class="contact-value">huseyn-maharramli</span>
+          <span class="contact-go">Open profile</span>
+        </a></li>
+        <li><a href="https://github.com/hmaharramli55-dot" target="_blank" rel="noopener">
+          <span class="contact-kind">GitHub</span>
+          <span class="contact-value">hmaharramli55-dot</span>
+          <span class="contact-go">Browse repositories</span>
+        </a></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <ol class="footnotes">
+      <li>The animation at the top of this page is a live illustration. It trains small decision trees in your browser on synthetic data generated for the picture. It is not the dataset or the code from my assignment.</li>
+      <li>Every result quoted on this page comes from my own project notebooks, which are linked from each project.</li>
+    </ol>
+    <div class="footer-row">
+      <p>Copyright © 2026 Huseyn Maharramli. Baku, Azerbaijan.</p>
+      <p class="footer-links">
+        <a href="https://github.com/hmaharramli55-dot" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/huseyn-maharramli-18a904336/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:hmaharramli55@gmail.com">Email</a>
+        <a href="#top">Back to top</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
