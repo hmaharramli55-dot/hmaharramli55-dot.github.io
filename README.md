@@ -10,15 +10,6 @@ One static page. There is no build step and nothing to install.
 | `ensemble.js` | The decision-tree model behind the picture at the top |
 | `demo.js` | Draws that picture and runs its slider |
 
-## View it
-
-Open `index.html` in a browser, or serve the folder:
-
-```bash
-npm start
-```
-
-Then visit http://localhost:4173.
 
 ## The design
 
