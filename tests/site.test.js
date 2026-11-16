@@ -336,12 +336,12 @@ test('local stylesheets, scripts and icons exist on disk', () => {
 });
 
 test('styles and scripts carry one shared version tag, so a new design is not hidden by a cached copy', () => {
-  const versions = ['styles.css', 'script.js', 'ensemble.js', 'demo.js'].map((file) => {
+  const versions = ['styles.css', 'script.js', 'ensemble.js', 'demo.js', 'scene3d.js'].map((file) => {
     const match = html.match(new RegExp(`"${file.replace('.', '\\.')}\\?v=(\\d+)"`));
     assert.ok(match, `${file} needs a ?v= version tag`);
     return match[1];
   });
-  assert.equal(new Set(versions).size, 1, 'all four share the same version');
+  assert.equal(new Set(versions).size, 1, 'all five share the same version');
 });
 
 test('structured data describes the person', () => {
@@ -579,4 +579,35 @@ test('the scene is built from CSS 3D and falls back to nothing without JavaScrip
   assert.match(css, /\.scene\s*\{[^}]*display:\s*none/);
   assert.match(css, /\.js \.scene\s*\{[^}]*perspective:/);
   assert.match(css, /\.f-top\s*\{[^}]*rotateX\(90deg\)/);
+});
+
+// ------------------------------ WebGL workstation ----------------------------
+
+const scene3d = read('scene3d.js');
+
+test('Three.js comes from one pinned version, declared in an import map before the module', () => {
+  const map = html.match(/<script type="importmap">([\s\S]*?)<\/script>/);
+  assert.ok(map, 'import map is present');
+  const imports = JSON.parse(map[1]).imports;
+  assert.match(imports.three, /^https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.\d+\.\d+\/build\/three\.module\.min\.js$/);
+  const version = imports.three.match(/three@([\d.]+)/)[1];
+  assert.equal(imports['three/addons/'], `https://cdn.jsdelivr.net/npm/three@${version}/examples/jsm/`);
+  assert.ok(html.indexOf('type="importmap"') < html.indexOf('scene3d.js'));
+  assert.match(html, /<script type="module" src="scene3d\.js\?v=\d+"><\/script>/);
+});
+
+test('the WebGL scene is an upgrade: the CSS scene stays until it has drawn, and if it cannot', () => {
+  assert.match(scene3d, /^import \* as THREE from 'three';/m);
+  assert.match(scene3d, /catch\s*\(/, 'a failure leaves the CSS scene in place');
+  assert.ok(scene3d.indexOf('renderer.render(') < scene3d.lastIndexOf("classList.add('is-webgl')"), 'marked ready only after a frame is drawn');
+  assert.match(css, /\.scene\.is-webgl \.scene-stage\s*\{[^}]*display:\s*none/);
+});
+
+test('the WebGL scene has soft shadows and reflections, and rests when it should', () => {
+  assert.match(scene3d, /shadowMap\.enabled = true/);
+  assert.match(scene3d, /PCFSoftShadowMap/);
+  assert.match(scene3d, /RoomEnvironment/);
+  assert.match(scene3d, /prefers-reduced-motion/);
+  assert.match(scene3d, /IntersectionObserver/);
+  assert.match(scene3d, /0\.873/, 'the monitor still shows the real result');
 });

@@ -17,10 +17,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;family=Geist:wght@400..700&amp;family=Geist+Mono:wght@400..600&amp;display=swap">
-<link rel="stylesheet" href="styles.css?v=8">
-<script src="ensemble.js?v=8" defer></script>
-<script src="demo.js?v=8" defer></script>
-<script src="script.js?v=8" defer onerror="document.documentElement.classList.remove('js')"></script>
+<link rel="stylesheet" href="styles.css?v=9">
+<script src="ensemble.js?v=9" defer></script>
+<script src="demo.js?v=9" defer></script>
+<script src="script.js?v=9" defer onerror="document.documentElement.classList.remove('js')"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="scene3d.js?v=9"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -80,7 +82,7 @@
         </p>
       </div>
 
-      <!-- A workstation drawn with CSS 3D. Decorative; script.js adds the box faces and the hologram. -->
+      <!-- A workstation. This CSS 3D version shows first; scene3d.js replaces it with a Three.js one where WebGL works. Decorative. -->
       <div class="scene" aria-hidden="true">
         <div class="scene-stage">
           <div class="scene-shadow"></div>
