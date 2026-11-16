@@ -31,14 +31,15 @@ test('resolveTheme ignores junk values in storage', () => {
   assert.equal(resolveTheme('', false), 'light');
 });
 
-test('navTone is dark over always-dark sections and light over the rest', () => {
-  const { navTone } = load();
-  assert.equal(navTone('hero tone-dark'), 'dark');
-  assert.equal(navTone('section section-contact tone-dark'), 'dark');
-  assert.equal(navTone('section section-alt'), 'light');
-  assert.equal(navTone('site-footer'), 'light');
-  assert.equal(navTone(''), 'light');
-  assert.equal(navTone('not-tone-darker'), 'light');
+test('bakuClock prints the time in Baku, four hours ahead of UTC all year', () => {
+  const { bakuClock } = load();
+  assert.equal(bakuClock(new Date('2026-11-16T10:05:00Z')), '14:05');
+  assert.equal(bakuClock(new Date('2026-07-01T21:30:00Z')), '01:30');
+  assert.equal(bakuClock(new Date('2026-01-01T00:00:00Z')), '04:00');
+});
+
+test('the script no longer carries the old navigation-tone switch', () => {
+  assert.equal(load().navTone, undefined);
 });
 
 test('nextTheme flips between light and dark', () => {

@@ -1,5 +1,5 @@
 /* Theme toggle, scroll reveal, count-up numbers, scroll progress,
-   current-section highlight and the bar's light/dark tone.
+   current-section highlight and the Baku clock.
    A classic script (not a module) so the page also works when opened straight
    from disk. The page is fully readable without it. */
 (function (root, factory) {
@@ -29,11 +29,13 @@
     return current === 'dark' ? 'light' : 'dark';
   }
 
-  /** The navigation bar goes dark over sections that are dark in both themes. */
-  function navTone(className) {
-    return String(className).split(/\s+/).indexOf('tone-dark') !== -1 ? 'dark' : 'light';
+  /** "14:05": the time in Baku, which is UTC+4 all year (no daylight saving). */
+  function bakuClock(date) {
+    var minutes = (date.getUTCHours() * 60 + date.getUTCMinutes() + 240) % 1440;
+    var hh = Math.floor(minutes / 60);
+    var mm = minutes % 60;
+    return (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
   }
-
 
   /* ---------- motion helpers (pure, tested in Node) ---------- */
 
@@ -94,7 +96,14 @@
 
     toggle.addEventListener('click', function () {
       var theme = nextTheme(current());
-      rootEl.dataset.theme = theme;
+      // cross-fade the two themes where the browser can; otherwise switch at once
+      if (doc.startViewTransition && !prefersReducedMotion(win)) {
+        doc.startViewTransition(function () {
+          rootEl.dataset.theme = theme;
+        });
+      } else {
+        rootEl.dataset.theme = theme;
+      }
       try {
         win.localStorage.setItem(STORAGE_KEY, theme);
       } catch (error) {
@@ -164,23 +173,15 @@
     });
   }
 
-  function initNavTone(doc, win) {
-    var header = doc.querySelector('.site-header');
-    var zones = Array.prototype.slice.call(doc.querySelectorAll('main > section, .site-footer'));
-    if (!header || !zones.length || !('IntersectionObserver' in win)) return;
-
-    // Watch a thin band at the top of the screen, where the bar sits.
-    var observer = new win.IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) header.dataset.tone = navTone(entry.target.className);
-        });
-      },
-      { rootMargin: '0px 0px -95% 0px' }
-    );
-    zones.forEach(function (zone) {
-      observer.observe(zone);
-    });
+  /* The header shows what time it is for me; the page prints "UTC+4" without this. */
+  function initClock(doc, win) {
+    var el = doc.getElementById('baku-time');
+    if (!el) return;
+    function tick() {
+      el.textContent = bakuClock(new Date());
+    }
+    tick();
+    win.setInterval(tick, 15000);
   }
 
   /* The four headline numbers count up from zero the first time they are seen.
@@ -263,13 +264,13 @@
     initCountUp(doc, win);
     initScrollProgress(doc, win);
     initSectionSpy(doc, win);
-    initNavTone(doc, win);
+    initClock(doc, win);
   }
 
   return {
     resolveTheme: resolveTheme,
     nextTheme: nextTheme,
-    navTone: navTone,
+    bakuClock: bakuClock,
     parseCount: parseCount,
     formatCount: formatCount,
     countAt: countAt,

@@ -134,9 +134,10 @@ test('theme is applied before first paint', () => {
 
 // --------------------------------- hero ------------------------------------
 
-test('hero is dark in both themes', () => {
+test('hero follows the visitor theme while the illustration stage stays dark', () => {
   const hero = tags('section').find((s) => s.id === 'top') || {};
-  assert.match(hero.class || '', /\btone-dark\b/);
+  assert.doesNotMatch(hero.class || '', /\btone-dark\b/);
+  assert.match(html, /<div class="demo-window tone-dark">/);
 });
 
 test('hero carries the live tree-voting illustration with a text alternative', () => {
@@ -428,13 +429,15 @@ test('every looping animation is switched off for visitors who ask for reduced m
 });
 
 test('the page has its own typefaces rather than the system font alone', () => {
-  assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*Bricolage\+Grotesque/);
-  assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*JetBrains\+Mono/);
-  assert.match(css, /--display:\s*"Bricolage Grotesque"/);
-  assert.match(css, /--mono:\s*"JetBrains Mono"/);
+  for (const family of ['Archivo', 'Geist', 'Geist\\+Mono']) {
+    assert.match(html, new RegExp(`fonts\\.googleapis\\.com/css2\\?[^"]*family=${family}:`));
+  }
+  assert.match(css, /--display:\s*"Archivo"/);
+  assert.match(css, /--font:\s*"Geist"/);
+  assert.match(css, /--mono:\s*"Geist Mono"/);
 });
 
-// ---------------------------------- poster ----------------------------------
+// ---------------------------------- design ----------------------------------
 
 test('the skin colours exist in the light theme and in both dark blocks', () => {
   for (const selector of [':root {', ':root:not([data-theme="light"])', ':root[data-theme="dark"]']) {
@@ -455,15 +458,36 @@ test('the illustration window bar is decorative and the page has no novelty badg
 
 test('the name is split for styling but still reads as one name', () => {
   const h1 = html.match(/<h1[^>]*>[\s\S]*?<\/h1>/)[0];
-  assert.match(h1, /class="h1-last"/);
+  assert.match(h1, /class="[^"]*\bh1-last\b/);
   assert.equal(toText(h1), 'Huseyn Maharramli');
 });
 
-test('the professional skin keeps type in sentence case and things level', () => {
-  const from = css.indexOf('/* ---------- Studio skin');
-  assert.ok(from !== -1, 'the skin block is present');
-  const skin = css.slice(from, css.indexOf('/* ---------- Motion ---------- */'));
-  assert.doesNotMatch(skin, /text-transform:\s*uppercase/);
-  assert.doesNotMatch(skin, /rotate\(/);
-  assert.doesNotMatch(css, /Poster skin/);
+test('the stylesheet is one system, not layers of old skins', () => {
+  assert.doesNotMatch(css, /\bskin\b/i);
+  assert.doesNotMatch(css + html, /\bbento\b|\btile-\d/);
+  assert.ok(css.split('\n').length < 2200, 'the stylesheet stays smaller than the 2,500-line one it replaced');
+});
+
+test('each project is a numbered case, in order', () => {
+  const cases = html.match(/<article class="project case[^"]*"[^>]*>[\s\S]*?<\/article>/g) || [];
+  assert.equal(cases.length, 4);
+  cases.forEach((block, i) => {
+    const no = block.match(/<p class="case-no" aria-hidden="true">([^<]+)<\/p>/);
+    assert.ok(no, 'each case shows its number');
+    assert.equal(no[1], `P/0${i + 1}`);
+  });
+});
+
+test('sections sit on a two-column grid: heading rail and body', () => {
+  const grids = html.match(/<div class="wrap section-grid">/g) || [];
+  const bodies = html.match(/<div class="section-body">/g) || [];
+  assert.equal(grids.length, 5);
+  assert.equal(bodies.length, 5);
+});
+
+test('the header shows Baku time, with a fallback that reads without JavaScript', () => {
+  const clock = html.match(/<p class="clock" aria-hidden="true">([\s\S]*?)<\/p>/);
+  assert.ok(clock, 'clock is present and decorative');
+  assert.match(clock[1], /<span id="baku-time">UTC\+4<\/span>/);
+  assert.ok(toText(clock[1]).startsWith('Baku'));
 });
