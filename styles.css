@@ -206,12 +206,18 @@ strong {
   font-size: 0.9375rem;
   line-height: 1.2;
   text-decoration: none;
-  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--accent) 62%, #000);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
 .button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px -10px var(--shadow);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--accent) 62%, #000);
+}
+
+.button:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 color-mix(in srgb, var(--accent) 62%, #000);
 }
 
 .button-arrow::after,
@@ -449,9 +455,11 @@ strong {
   line-height: 0.9;
   letter-spacing: -0.05em;
   white-space: nowrap;
+  perspective: 700px;
 }
 
 .js .h1-line {
+  transform-origin: 50% 100%;
   display: inline-block;
   animation: rise 0.95s var(--ease) both;
 }
@@ -520,12 +528,39 @@ strong {
 
 /* The live picture */
 
+/* The window is a slab in space: its controls float in front of it and an
+   outline sits behind. overflow stays visible, or the depth would be flattened. */
 .demo-window {
-  overflow: hidden;
   border: 1px solid var(--edge);
   border-radius: 3px;
   background: var(--stage);
   box-shadow: 0 30px 60px -30px var(--shadow);
+}
+
+.demo-window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: inherit;
+  transform: translateZ(-46px);
+  pointer-events: none;
+}
+
+.demo-stage {
+  transform-style: preserve-3d;
+}
+
+.demo.is-ready .demo-hud {
+  transform: translateZ(38px);
+}
+
+@media (min-width: 62.01rem) {
+  .demo-window {
+    --rx: 5;
+    --ry: -11;
+    box-shadow: 46px 54px 80px -34px var(--shadow);
+  }
 }
 
 .demo-bar {
@@ -958,7 +993,6 @@ main {
 }
 
 .case-shot {
-  overflow: hidden;
   border-radius: 3px;
 }
 
@@ -1537,8 +1571,15 @@ main {
 }
 
 .award {
-  padding-top: 1.4rem;
-  border-top: 1px solid var(--ink);
+  padding: 1.4rem;
+  border: 1px solid var(--edge);
+  border-top-color: var(--ink);
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.award > * {
+  transform: translateZ(16px);
 }
 
 .award-icon {
@@ -1682,18 +1723,174 @@ main {
   color: var(--accent);
 }
 
+/* ---------- About: how I work, right now ---------- */
+
+.approach,
+.now {
+  margin-top: 3.5rem;
+}
+
+.approach > h3,
+.now > h3 {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--ink);
+  color: var(--muted);
+  font: 0.75rem/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.approach-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+  counter-reset: step;
+}
+
+.approach-list li {
+  padding: 1.25rem;
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.approach-list li > * {
+  transform: translateZ(18px);
+}
+
+.approach-list li::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  color: var(--accent);
+  font: 0.75rem var(--mono);
+  transform: translateZ(30px);
+}
+
+.approach-list h4 {
+  margin-block: 1.75rem 0.5rem;
+  font: 700 1.1875rem/1.15 var(--display);
+  letter-spacing: -0.025em;
+}
+
+.approach-list p {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.now-list li {
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--edge);
+  color: var(--muted);
+}
+
+.now-list strong {
+  display: inline-block;
+  min-width: 6.5rem;
+  color: var(--ink);
+}
+
+@container (max-width: 44rem) {
+  .approach-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- 3D: tilting cards and the skill globe ---------- */
+
+/* script.js writes --rx / --ry (degrees) and the glare position while the
+   pointer is over a card. Without it the card rests flat. */
+[data-tilt] {
+  position: relative;
+  transform: perspective(1100px) rotateX(calc(var(--rx, 0) * 1deg)) rotateY(calc(var(--ry, 0) * 1deg));
+  transform-style: preserve-3d;
+  transition: transform 0.7s var(--ease), box-shadow 0.7s var(--ease);
+}
+
+[data-tilt].is-tilting {
+  transition-duration: 0.12s;
+  box-shadow: 0 34px 50px -28px var(--shadow);
+}
+
+[data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+[data-tilt].is-tilting::after {
+  opacity: 1;
+}
+
+.fig > * {
+  transform: translateZ(16px);
+}
+
+.skill-globe {
+  display: none;
+}
+
+.skill-globe.is-on {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: clamp(20rem, 52cqi, 29rem);
+  margin-bottom: 2.5rem;
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  background: radial-gradient(circle at 50% 50%, var(--surface), transparent 72%);
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.skill-globe.is-dragging {
+  cursor: grabbing;
+}
+
+.skill-globe::before {
+  content: "Drag to spin";
+  position: absolute;
+  left: 0.9rem;
+  bottom: 0.75rem;
+  color: var(--muted);
+  font: 0.6875rem var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.skill-globe::after {
+  content: "";
+  position: absolute;
+  inset: 12% 10%;
+  border: 1px dashed var(--edge);
+  border-radius: 50%;
+}
+
+.skill-globe-word {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font: 600 1rem/1 var(--display);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
 /* ---------- Motion ---------- */
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(0.4em);
-    clip-path: inset(0 0 100% 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    clip-path: inset(-0.3em);
+    transform: rotateX(-80deg) translateY(0.25em);
   }
 }
 
@@ -1747,21 +1944,14 @@ main {
 /* Scroll reveal only applies once script.js is running (html.js). */
 .js .reveal {
   opacity: 0;
-  transform: translateY(1.25rem);
+  transform: perspective(900px) rotateX(10deg) translateY(1.75rem);
+  transform-origin: 50% 100%;
   transition: opacity 0.7s ease, transform 0.8s var(--ease);
 }
 
 .js .reveal.is-visible {
   opacity: 1;
   transform: none;
-}
-
-.js .awards > .reveal:nth-child(2) {
-  transition-delay: 0.1s;
-}
-
-.js .awards > .reveal:nth-child(3) {
-  transition-delay: 0.2s;
 }
 
 /* Chart bars grow to their value. */
@@ -1843,6 +2033,10 @@ main {
     display: none;
   }
 
+  .skill-globe-word {
+    font-size: 0.8125rem;
+  }
+
   .highlights {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1917,6 +2111,12 @@ main {
 
   .route-pulse {
     display: none;
+  }
+
+  [data-tilt],
+  .demo.is-ready .demo-hud,
+  .demo-window::before {
+    transform: none;
   }
 }
 

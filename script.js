@@ -1,5 +1,5 @@
 /* Theme toggle, scroll reveal, count-up numbers, scroll progress,
-   current-section highlight and the Baku clock.
+   current-section highlight, the Baku clock, tilting cards and the skill globe.
    A classic script (not a module) so the page also works when opened straight
    from disk. The page is fully readable without it. */
 (function (root, factory) {
@@ -73,6 +73,34 @@
     var room = scrollHeight - viewportHeight;
     if (room <= 0) return 0;
     return Math.min(1, Math.max(0, scrollTop / room));
+  }
+
+  /* ---------- 3D helpers (pure, tested in Node) ---------- */
+
+  /** Pointer position inside a card (0 to 1 each way) → degrees of tilt toward the pointer. */
+  function tiltAngles(x, y, max) {
+    var cx = Math.min(1, Math.max(0, x));
+    var cy = Math.min(1, Math.max(0, y));
+    return { rx: (0.5 - cy) * 2 * max, ry: (cx - 0.5) * 2 * max };
+  }
+
+  /** `count` points spread evenly over a sphere of radius 1. */
+  function fibonacciSphere(count) {
+    var golden = Math.PI * (3 - Math.sqrt(5));
+    var points = [];
+    for (var i = 0; i < count; i += 1) {
+      var y = 1 - (2 * i + 1) / count;
+      var ring = Math.sqrt(1 - y * y);
+      points.push([Math.cos(i * golden) * ring, y, Math.sin(i * golden) * ring]);
+    }
+    return points;
+  }
+
+  /** Turns a point about the X axis by `ax`, then about the Y axis by `ay` (radians). */
+  function rotatePoint(point, ax, ay) {
+    var y = point[1] * Math.cos(ax) - point[2] * Math.sin(ax);
+    var z = point[1] * Math.sin(ax) + point[2] * Math.cos(ax);
+    return [point[0] * Math.cos(ay) + z * Math.sin(ay), y, -point[0] * Math.sin(ay) + z * Math.cos(ay)];
   }
 
   function prefersReducedMotion(win) {
@@ -258,6 +286,143 @@
     paint();
   }
 
+  /* Cards marked data-tilt lean toward the pointer. Mouse only: on touch they stay flat. */
+  function initTilt(doc, win) {
+    if (prefersReducedMotion(win) || !win.matchMedia) return;
+    if (!win.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    Array.prototype.slice.call(doc.querySelectorAll('[data-tilt]')).forEach(function (el) {
+      var max = el.classList.contains('demo-window') ? 10 : 7;
+      el.addEventListener('pointermove', function (event) {
+        var box = el.getBoundingClientRect();
+        if (!box.width || !box.height) return;
+        var x = (event.clientX - box.left) / box.width;
+        var y = (event.clientY - box.top) / box.height;
+        var angles = tiltAngles(x, y, max);
+        el.style.setProperty('--rx', angles.rx.toFixed(2));
+        el.style.setProperty('--ry', angles.ry.toFixed(2));
+        el.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
+        el.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
+        el.classList.add('is-tilting');
+      });
+      el.addEventListener('pointerleave', function () {
+        ['--rx', '--ry', '--gx', '--gy'].forEach(function (name) {
+          el.style.removeProperty(name);
+        });
+        el.classList.remove('is-tilting');
+      });
+    });
+  }
+
+  /* A slowly turning globe of skills, built from the lists below it so the two
+     never disagree. Drag to spin. Decorative: the lists are the real content. */
+  function initGlobe(doc, win) {
+    var box = doc.querySelector('.skill-globe');
+    if (!box || !win.requestAnimationFrame) return;
+
+    var seen = {};
+    var words = [];
+    Array.prototype.slice.call(doc.querySelectorAll('.specs .chips li')).forEach(function (chip) {
+      var text = chip.textContent.trim();
+      if (text.length > 18 || seen[text] || words.length >= 38) return;
+      seen[text] = true;
+      words.push(text);
+    });
+    if (words.length < 8) return;
+
+    var points = fibonacciSphere(words.length);
+    var nodes = words.map(function (word) {
+      var node = doc.createElement('span');
+      node.className = 'skill-globe-word';
+      node.textContent = word;
+      box.appendChild(node);
+      return node;
+    });
+    box.classList.add('is-on');
+
+    var SPIN = 0.00022; // radians per millisecond when left alone
+    var ax = -0.35;
+    var ay = 0;
+    var vy = SPIN;
+    var still = prefersReducedMotion(win);
+    var running = false;
+    var last = 0;
+    var drag = null;
+
+    function paint() {
+      // wider than tall, so the words have room to pass each other
+      var radiusY = box.clientHeight * 0.38;
+      var radiusX = Math.max(60, Math.min(box.clientWidth / 2 - 70, radiusY * 2.1));
+      for (var i = 0; i < nodes.length; i += 1) {
+        var p = rotatePoint(points[i], ax, ay);
+        var depth = (p[2] + 1) / 2; // 0 at the back, 1 at the front
+        var style = nodes[i].style;
+        style.transform =
+          'translate(-50%, -50%) translate3d(' + (p[0] * radiusX).toFixed(1) + 'px,' +
+          (p[1] * radiusY).toFixed(1) + 'px, 0) scale(' + (0.62 + 0.5 * depth).toFixed(3) + ')';
+        style.opacity = (0.12 + 0.88 * depth * depth).toFixed(3);
+        style.zIndex = String(Math.round(depth * 100));
+      }
+    }
+
+    function frame(now) {
+      if (!running) return;
+      var dt = Math.min(64, now - (last || now));
+      last = now;
+      if (!drag) {
+        ay += vy * dt;
+        vy += (SPIN - vy) * 0.02; // ease back to the resting spin after a flick
+      }
+      paint();
+      win.requestAnimationFrame(frame);
+    }
+
+    function start() {
+      if (running || still) return;
+      running = true;
+      last = 0;
+      win.requestAnimationFrame(frame);
+    }
+
+    box.addEventListener('pointerdown', function (event) {
+      drag = { x: event.clientX, y: event.clientY, t: event.timeStamp };
+      box.classList.add('is-dragging');
+      if (box.setPointerCapture) box.setPointerCapture(event.pointerId);
+    });
+    box.addEventListener('pointermove', function (event) {
+      if (!drag) return;
+      var dx = event.clientX - drag.x;
+      var dy = event.clientY - drag.y;
+      var dt = Math.max(1, event.timeStamp - drag.t);
+      ay += dx * 0.006;
+      ax = Math.min(1.2, Math.max(-1.2, ax + dy * 0.006));
+      vy = Math.min(0.004, Math.max(-0.004, (dx * 0.006) / dt));
+      drag = { x: event.clientX, y: event.clientY, t: event.timeStamp };
+      if (still) paint();
+    });
+    ['pointerup', 'pointercancel'].forEach(function (type) {
+      box.addEventListener(type, function () {
+        drag = null;
+        box.classList.remove('is-dragging');
+      });
+    });
+
+    paint();
+    if ('IntersectionObserver' in win) {
+      new win.IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            paint();
+            start();
+          } else {
+            running = false;
+          }
+        });
+      }).observe(box);
+    } else {
+      start();
+    }
+  }
+
   function init(doc, win) {
     initTheme(doc, win);
     initReveal(doc, win);
@@ -265,6 +430,8 @@
     initScrollProgress(doc, win);
     initSectionSpy(doc, win);
     initClock(doc, win);
+    initTilt(doc, win);
+    initGlobe(doc, win);
   }
 
   return {
@@ -275,6 +442,9 @@
     formatCount: formatCount,
     countAt: countAt,
     scrollProgress: scrollProgress,
+    tiltAngles: tiltAngles,
+    fibonacciSphere: fibonacciSphere,
+    rotatePoint: rotatePoint,
     init: init
   };
 });

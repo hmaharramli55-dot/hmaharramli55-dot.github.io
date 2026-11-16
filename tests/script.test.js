@@ -98,3 +98,33 @@ test('scrollProgress runs from 0 at the top to 1 at the bottom and stays in rang
   assert.equal(scrollProgress(9999, 3000, 1000), 1);
   assert.equal(scrollProgress(0, 800, 1000), 0, 'a page shorter than the screen has no progress');
 });
+
+// --------------------------------- 3D helpers -------------------------------
+
+test('tiltAngles turns a pointer position into a small rotation toward the pointer', () => {
+  const { tiltAngles } = load();
+  assert.deepEqual(tiltAngles(0.5, 0.5, 8), { rx: 0, ry: 0 });
+  assert.deepEqual(tiltAngles(1, 0, 8), { rx: 8, ry: 8 });
+  assert.deepEqual(tiltAngles(0, 1, 8), { rx: -8, ry: -8 });
+  assert.deepEqual(tiltAngles(5, -3, 8), { rx: 8, ry: 8 }, 'clamped outside the element');
+});
+
+test('fibonacciSphere spreads points evenly over a unit sphere', () => {
+  const { fibonacciSphere } = load();
+  const points = fibonacciSphere(40);
+  assert.equal(points.length, 40);
+  for (const [x, y, z] of points) assert.ok(Math.abs(Math.hypot(x, y, z) - 1) < 1e-9);
+  const mean = [0, 1, 2].map((i) => points.reduce((sum, p) => sum + p[i], 0) / points.length);
+  for (const m of mean) assert.ok(Math.abs(m) < 0.05, 'centred on the origin');
+  assert.deepEqual(fibonacciSphere(0), []);
+  assert.equal(fibonacciSphere(1).length, 1);
+});
+
+test('rotatePoint keeps length and turns the right way', () => {
+  const { rotatePoint } = load();
+  const near = (a, b) => a.every((v, i) => Math.abs(v - b[i]) < 1e-9);
+  assert.ok(near(rotatePoint([0, 0, 1], 0, Math.PI / 2), [1, 0, 0]), 'quarter turn about Y');
+  assert.ok(near(rotatePoint([0, 1, 0], Math.PI / 2, 0), [0, 0, 1]), 'quarter turn about X');
+  const p = rotatePoint([0.3, -0.5, 0.81], 1.1, -2.3);
+  assert.ok(Math.abs(Math.hypot(...p) - Math.hypot(0.3, -0.5, 0.81)) < 1e-9);
+});

@@ -13,20 +13,28 @@ One static page. There is no build step and nothing to install.
 
 ## The design
 
-A Swiss-style grid: big type, hairline rules, one accent colour, no cards.
+A Swiss-style grid with depth: big type, hairline rules, one accent colour, and cards that sit in 3D space.
 
 - **Type**: Archivo for the name and headings, Geist for text, Geist Mono for small capital labels.
 - **Colour**: pale grey-green and near-black, with one green. In the light theme the green is dark; on dark surfaces it is lime. The primary button is the inverse of the page.
 - **Layout**: every section is two columns, a heading rail on the left that stays in view and the content on the right (`.section-grid`, `.section-head`, `.section-body`). On narrow screens they stack.
-- **Work** is one row per project (`.case`), numbered P/01 to P/04, with the chart beside the text. Rows respond to the width of their column (container queries), not the window.
+- **Work** is one row per project (`.case`), numbered P/01 to P/05, with the chart beside the text. Rows respond to the width of their column (container queries), not the window.
 - **Dark blocks**: the Journey section, the contact block, the footer and the picture's stage carry the class `tone-dark` and are dark in both themes. Everything else follows the visitor's theme.
 - **Header**: a thin bar with the time in Baku (`bakuClock` in `script.js`; it prints "UTC+4" without JavaScript).
 - **The picture at the top** is a real model running in the browser: 1,000 small decision trees, each trained on 100 random points from a synthetic two-class dataset, voting on every part of the image. It illustrates the ensemble project; it is not that project's data or results, and the caption and footnote say so.
 - `styles.css` is one system, in order: tokens, base, header, hero, sections, components, motion, small screens.
 
+## 3D
+
+- Anything marked `data-tilt` leans toward the mouse and shows a soft glare (`initTilt` in `script.js`; the angle comes from `tiltAngles`). Its contents float a little above it. Touch screens keep these flat.
+- The picture at the top rests at an angle, with its slider floating in front and an outline behind.
+- The Skills section opens with a globe of skill names that turns slowly and can be dragged (`initGlobe`). It is built from the skill lists under it, so edit the lists and the globe follows. It is decorative and hidden from screen readers.
+- Sections swing up into place as they scroll in, and the name flips up on load.
+- Do not put `data-tilt` on an element that also has `reveal`: both use `transform`. A test checks this.
+
 ## Motion
 
-- The name rises into place and the highlighted words get their underline.
+- The highlighted words in the tagline get their underline.
 - A strip of tools scrolls under the hero (`.ticker`). It holds two identical lists so the loop has no seam; edit both.
 - The four headline numbers count up from zero; a thin bar along the top shows how far down the page you are.
 - Chart bars grow to their value, skill chips arrive one by one, award icons draw their outline.
@@ -39,9 +47,9 @@ A Swiss-style grid: big type, hairline rules, one accent colour, no cards.
 - **Text** lives in `index.html`. Each section starts with a comment: Hero, About, Projects, Journey, Skills, Recognition, Contact.
 - **Colours** are the tokens at the top of `styles.css`. There are two dark blocks and they must stay identical.
 - **A chart bar** is one `<li class="meter">`. Its `data-value`, `data-max`, bar width (`--v`, which is value ÷ max × 100) and printed number must agree. The tests fail if they don't.
-- **A new project** is a copy of an `<article class="project case reveal">` block with a new `id` and the next `P/0n` number.
+- **A new project** is a copy of an `<article class="project case reveal">` block with a new `id` and the next `P/0n` number. Every number on the page comes from the linked notebook; keep it that way.
 
-- **After changing `styles.css` or a script**, raise the number in `?v=5` on all four links at the top of `index.html`. Browsers keep old copies for a while; a new number makes them fetch the new files.
+- **After changing `styles.css` or a script**, raise the number in `?v=6` on all four links at the top of `index.html`. Browsers keep old copies for a while; a new number makes them fetch the new files.
 
 ## Test it
 
@@ -49,7 +57,7 @@ A Swiss-style grid: big type, hairline rules, one accent colour, no cards.
 npm test
 ```
 
-Needs Node 20 or newer. The 74 checks cover: every section and link is present, the Erasmus entry, the numbers quoted for each project, chart bars matching their labels, the tree model (training, voting, repeatability), how the picture animates (including for visitors who ask for reduced motion), the count-up numbers, the Baku clock and the tools strip, the two dark themes staying in sync, and no phone number or placeholder text on the page.
+Needs Node 20 or newer. The 82 checks cover: every section and link is present, the Erasmus entry, the numbers quoted for each project, chart bars matching their labels, the tree model (training, voting, repeatability), how the picture animates (including for visitors who ask for reduced motion), the count-up numbers, the Baku clock, the tools strip, the 3D helpers, the two dark themes staying in sync, and no phone number or placeholder text on the page.
 ## Publish it
 
 The site is served by GitHub Pages from the `main` branch of this repository, at https://hmaharramli55-dot.github.io/. Pushing to `main` updates it within a minute or two.

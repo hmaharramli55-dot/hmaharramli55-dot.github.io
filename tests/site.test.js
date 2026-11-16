@@ -137,7 +137,7 @@ test('theme is applied before first paint', () => {
 test('hero follows the visitor theme while the illustration stage stays dark', () => {
   const hero = tags('section').find((s) => s.id === 'top') || {};
   assert.doesNotMatch(hero.class || '', /\btone-dark\b/);
-  assert.match(html, /<div class="demo-window tone-dark">/);
+  assert.match(html, /<div class="demo-window tone-dark"/);
 });
 
 test('hero carries the live tree-voting illustration with a text alternative', () => {
@@ -256,7 +256,7 @@ test('DevJoint track lists four weekly deliverables with their repositories', ()
 
 test('chart bars are drawn at exactly the value they print', () => {
   const meters = [...html.matchAll(/<li\b[^>]*class="meter[^"]*"[^>]*>[\s\S]*?<\/li>/g)].map((m) => m[0]);
-  assert.equal(meters.length, 7, 'expected 3 accuracy bars, 2 score bars and 2 profit bars');
+  assert.equal(meters.length, 9, 'expected 3 accuracy bars, 2 score bars, 2 profit bars and 2 error bars');
   for (const meter of meters) {
     const { 'data-value': rawValue, 'data-max': rawMax } = attrsOf(meter.match(/<li\b[^>]*>/)[0]);
     const value = Number(rawValue);
@@ -266,7 +266,7 @@ test('chart bars are drawn at exactly the value they print', () => {
     const expected = (Math.abs(value) / max) * 100;
     assert.ok(Math.abs(drawn - expected) < 0.01, `bar drawn at ${drawn}% but value is ${expected}%`);
     assert.ok(
-      toText(meter).includes(String(Math.abs(value))),
+      toText(meter).replace(/,/g, '').includes(String(Math.abs(value))),
       `meter should print its value ${Math.abs(value)}: ${toText(meter)}`
     );
     assert.equal(/meter-fill[^"]*\bneg\b/.test(meter), value < 0, 'negative values use the negative bar');
@@ -470,7 +470,7 @@ test('the stylesheet is one system, not layers of old skins', () => {
 
 test('each project is a numbered case, in order', () => {
   const cases = html.match(/<article class="project case[^"]*"[^>]*>[\s\S]*?<\/article>/g) || [];
-  assert.equal(cases.length, 4);
+  assert.equal(cases.length, 5);
   cases.forEach((block, i) => {
     const no = block.match(/<p class="case-no" aria-hidden="true">([^<]+)<\/p>/);
     assert.ok(no, 'each case shows its number');
@@ -490,4 +490,52 @@ test('the header shows Baku time, with a fallback that reads without JavaScript'
   assert.ok(clock, 'clock is present and decorative');
   assert.match(clock[1], /<span id="baku-time">UTC\+4<\/span>/);
   assert.ok(toText(clock[1]).startsWith('Baku'));
+});
+
+// ------------------------------ new content ---------------------------------
+
+test('car price project reports what the week 3 notebook measured', () => {
+  const block = article('project-cars');
+  assertIncludesAll(
+    toText(block),
+    ['Car Price Prediction', '50,000', '13,764', '5,195', '4,793', '62%', '6,398', '1,875', 'ColumnTransformer'],
+    'car price project'
+  );
+  assert.ok(block.includes(`href="${LINKS.week3}"`));
+});
+
+test('about says how I work, in three points, and what I am doing now', () => {
+  const approach = (html.match(/<ol class="approach-list">[\s\S]*?<\/ol>/) || [''])[0];
+  assert.equal((approach.match(/<li\b/g) || []).length, 3);
+  assertIncludesAll(toText(approach), ['question', 'scikit-learn', 'store manager'], 'approach');
+  const now = (html.match(/<ul class="now-list">[\s\S]*?<\/ul>/) || [''])[0];
+  assertIncludesAll(toText(now), ['AI Academy', 'ADA University', 'Kaunas'], 'now list');
+});
+
+test('skills cover what the projects actually used, plus web and people skills', () => {
+  const specs = toText((html.match(/<dl class="specs">[\s\S]*?<\/dl>/) || [''])[0]);
+  assertIncludesAll(
+    specs,
+    ['Gradient Boosting', 'ColumnTransformer', 'RandomizedSearchCV', 't-test', 'Chi-square', 'ANOVA', 'Three.js', 'Teamwork', 'Communication'],
+    'skills'
+  );
+  assert.equal((html.match(/<dl class="specs">[\s\S]*?<\/dl>/)[0].match(/<dt>/g) || []).length, 7);
+});
+
+// ---------------------------------- 3D --------------------------------------
+
+test('cards that tilt are marked in the markup, and the skill globe is decorative', () => {
+  assert.ok((html.match(/\sdata-tilt\b/g) || []).length >= 10, 'several elements tilt');
+  assert.match(html, /<div class="demo-window tone-dark" data-tilt>/);
+  assert.match(html, /<div class="skill-globe" aria-hidden="true"><\/div>/);
+  // a tilting element must not also be a scroll-reveal element: both use transform
+  assert.doesNotMatch(html, /class="[^"]*\breveal\b[^"]*"[^>]*\sdata-tilt\b/);
+});
+
+test('3D effects are switched off for reduced motion', () => {
+  const from = css.indexOf('@media (prefers-reduced-motion: reduce)');
+  const reduced = css.slice(from, css.indexOf('@media print', from));
+  assert.match(reduced, /\[data-tilt\][\s\S]*transform:\s*none/);
+  assert.match(css, /transform-style:\s*preserve-3d/);
+  assert.match(css, /perspective\(/);
 });
