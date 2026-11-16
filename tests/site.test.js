@@ -327,10 +327,20 @@ test('local stylesheets, scripts and icons exist on disk', () => {
     ...tags('link').map((l) => l.href),
     ...tags('script').map((s) => s.src),
   ].filter((ref) => ref && !/^(https?:|data:)/.test(ref));
+  const files = local.map((ref) => ref.split('?')[0]);
   for (const needed of ['styles.css', 'script.js', 'ensemble.js', 'demo.js']) {
-    assert.ok(local.includes(needed), `page should load ${needed}`);
+    assert.ok(files.includes(needed), `page should load ${needed}`);
   }
-  for (const ref of local) assert.ok(exists(ref), `missing file: ${ref}`);
+  for (const file of files) assert.ok(exists(file), `missing file: ${file}`);
+});
+
+test('styles and scripts carry one shared version tag, so a new design is not hidden by a cached copy', () => {
+  const versions = ['styles.css', 'script.js', 'ensemble.js', 'demo.js'].map((file) => {
+    const match = html.match(new RegExp(`"${file.replace('.', '\\.')}\\?v=(\\d+)"`));
+    assert.ok(match, `${file} needs a ?v= version tag`);
+    return match[1];
+  });
+  assert.equal(new Set(versions).size, 1, 'all four share the same version');
 });
 
 test('structured data describes the person', () => {

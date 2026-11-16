@@ -42,13 +42,15 @@ The page is styled as a data poster.
 - **A chart bar** is one `<li class="meter">`. Its `data-value`, `data-max`, bar width (`--v`, which is value ÷ max × 100) and printed number must agree. The tests fail if they don't.
 - **A new project** is a copy of an `<article class="project tile …">` block with a new `id`. `tile-7` and `tile-5` set how wide it is in the 12-column grid.
 
+- **After changing `styles.css` or a script**, raise the number in `?v=3` on all four links at the top of `index.html`. Browsers keep old copies for a while; a new number makes them fetch the new files.
+
 ## Test it
 
 ```bash
 npm test
 ```
 
-Needs Node 20 or newer. The 69 checks cover: every section and link is present, the Erasmus entry, the numbers quoted for each project, chart bars matching their labels, the tree model (training, voting, repeatability), how the picture animates (including for visitors who ask for reduced motion), the count-up numbers and the tools strip, the two dark themes staying in sync, and no phone number or placeholder text on the page.
+Needs Node 20 or newer. The 70 checks cover: every section and link is present, the Erasmus entry, the numbers quoted for each project, chart bars matching their labels, the tree model (training, voting, repeatability), how the picture animates (including for visitors who ask for reduced motion), the count-up numbers and the tools strip, the two dark themes staying in sync, and no phone number or placeholder text on the page.
 ## Publish it
 
 The site is served by GitHub Pages from the `main` branch of this repository, at https://hmaharramli55-dot.github.io/. Pushing to `main` updates it within a minute or two.
