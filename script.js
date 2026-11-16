@@ -1,5 +1,5 @@
-/* Theme toggle, scroll reveal, count-up numbers, scroll progress, the pointer
-   glow on tiles, current-section highlight and the bar's light/dark tone.
+/* Theme toggle, scroll reveal, count-up numbers, scroll progress,
+   current-section highlight and the bar's light/dark tone.
    A classic script (not a module) so the page also works when opened straight
    from disk. The page is fully readable without it. */
 (function (root, factory) {
@@ -257,24 +257,11 @@
     paint();
   }
 
-  /* A soft light follows the pointer across tiles and contact cards. */
-  function initSpotlight(doc, win) {
-    if (!win.matchMedia || !win.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    Array.prototype.slice.call(doc.querySelectorAll('.tile, .contact-list a')).forEach(function (el) {
-      el.addEventListener('pointermove', function (event) {
-        var box = el.getBoundingClientRect();
-        el.style.setProperty('--mx', event.clientX - box.left + 'px');
-        el.style.setProperty('--my', event.clientY - box.top + 'px');
-      });
-    });
-  }
-
   function init(doc, win) {
     initTheme(doc, win);
     initReveal(doc, win);
     initCountUp(doc, win);
     initScrollProgress(doc, win);
-    initSpotlight(doc, win);
     initSectionSpy(doc, win);
     initNavTone(doc, win);
   }

@@ -418,8 +418,44 @@ test('every looping animation is switched off for visitors who ask for reduced m
 });
 
 test('the page has its own typefaces rather than the system font alone', () => {
-  assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*Space\+Grotesk/);
+  assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*Bricolage\+Grotesque/);
   assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*JetBrains\+Mono/);
-  assert.match(css, /--display:\s*"Space Grotesk"/);
+  assert.match(css, /--display:\s*"Bricolage Grotesque"/);
   assert.match(css, /--mono:\s*"JetBrains Mono"/);
+});
+
+// ---------------------------------- poster ----------------------------------
+
+test('the poster colours exist in the light theme and in both dark blocks', () => {
+  for (const selector of [':root {', ':root:not([data-theme="light"])', ':root[data-theme="dark"]']) {
+    const names = declarations(blockAfter(css, selector)).map((d) => d.split(':')[0]);
+    for (const token of ['--edge', '--shadow', '--pop', '--pop-ink']) {
+      assert.ok(names.includes(token), `${token} is missing from ${selector}`);
+    }
+  }
+});
+
+test('hero decorations are hidden from screen readers and hold nothing focusable', () => {
+  const badge = html.match(/<svg class="spin-badge"[\s\S]*?<\/svg>/);
+  assert.ok(badge, 'spinning badge is present');
+  assert.match(badge[0], /^<svg[^>]*aria-hidden="true"/);
+  const words = toText(badge[0]);
+  for (const claim of ['MACHINE LEARNING', 'DATA SCIENCE']) assert.ok(words.includes(claim));
+  const bar = html.match(/<div class="demo-bar"[^>]*>[\s\S]*?<\/div>/);
+  assert.ok(bar, 'the illustration has a window bar');
+  assert.match(bar[0], /^<div[^>]*aria-hidden="true"/);
+  assert.doesNotMatch(badge[0] + bar[0], /<a\b|<button/);
+});
+
+test('the name is split for styling but still reads as one name', () => {
+  const h1 = html.match(/<h1[^>]*>[\s\S]*?<\/h1>/)[0];
+  assert.match(h1, /class="h1-last"/);
+  assert.equal(toText(h1), 'Huseyn Maharramli');
+});
+
+test('tiles that arrive tilted are straightened for reduced motion', () => {
+  const from = css.indexOf('@media (prefers-reduced-motion: reduce)');
+  const reduced = css.slice(from, css.indexOf('@media print', from));
+  assert.match(css, /\.js \.tile\.reveal\s*\{[^}]*rotate/);
+  assert.match(reduced, /\.js \.tile\.reveal\b/);
 });

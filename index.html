@@ -7,7 +7,7 @@
 <meta name="description" content="Portfolio of Huseyn Maharramli, a Computer Science student at ADA University working in machine learning and data science. Projects, results and experience.">
 <meta name="author" content="Huseyn Maharramli">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#05070f">
+<meta name="theme-color" content="#0b0b0f">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Huseyn Maharramli — AI Engineer">
 <meta property="og:description" content="Machine learning and data science projects with measured results, by a Computer Science student at ADA University.">
@@ -16,7 +16,7 @@
 <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add("js")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&amp;family=JetBrains+Mono:wght@400..600&amp;family=Space+Grotesk:wght@500..700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&amp;family=JetBrains+Mono:wght@400..600&amp;family=Bricolage+Grotesque:opsz,wght@12..96,500..800&amp;display=swap">
 <link rel="stylesheet" href="styles.css">
 <script src="ensemble.js" defer></script>
 <script src="demo.js" defer></script>
@@ -63,8 +63,13 @@
   <!-- ============================== Hero ============================== -->
   <section class="hero tone-dark" id="top" aria-labelledby="hero-title">
     <div class="wrap">
+      <svg class="spin-badge" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+        <defs><path id="spin-circle" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"/></defs>
+        <text><textPath href="#spin-circle" textLength="482">MACHINE LEARNING ✦ DATA SCIENCE ✦ PYTHON ✦ </textPath></text>
+        <path class="spin-star" d="M100 58l10 32 32 10-32 10-10 32-10-32-32-10 32-10z"/>
+      </svg>
       <p class="eyebrow"><span class="grad">AI Engineer</span></p>
-      <h1 id="hero-title">Huseyn Maharramli</h1>
+      <h1 id="hero-title">Huseyn <span class="h1-last">Maharramli</span></h1>
       <p class="hero-tagline">I like finding out what the data <span class="grad">actually shows</span>.</p>
       <p class="hero-sub">Computer Science at ADA University in Baku. Machine learning and data science.</p>
       <p class="actions">
@@ -73,6 +78,8 @@
       </p>
 
       <figure class="demo">
+        <div class="demo-window">
+        <div class="demo-bar" aria-hidden="true"><i></i><i></i><i></i><span>FIG. 01 · MAJORITY VOTE, LIVE</span></div>
         <div class="demo-stage">
           <canvas class="demo-canvas" role="img" aria-label="Animated illustration of ensemble learning: the boundary between a blue class and an orange class starts blocky with one decision tree and turns smooth as up to 1,000 trees vote."></canvas>
           <div class="demo-hud">
@@ -82,6 +89,7 @@
               <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M15.5 10a5.5 5.5 0 1 1-1.6-3.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14.6 3.2v3.3h-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
+        </div>
         </div>
         <figcaption>A live illustration of the idea behind my ensemble project, running in your browser. Small decision trees, each trained on 100 random points from a synthetic two-class dataset, vote on every part of the picture. Blue and orange are the two classes, and the colours blend where the vote is split.<span class="demo-hint"> Drag the slider to change how many trees vote.</span></figcaption>
       </figure>
