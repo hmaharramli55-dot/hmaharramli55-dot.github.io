@@ -375,3 +375,51 @@ test('stylesheet respects reduced motion and has no insecure resources', () => {
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.doesNotMatch(css + html, /http:\/\/(?!www\.w3\.org)/);
 });
+
+// ---------------------------------- motion ----------------------------------
+
+test('the tools ticker is decorative, repeats itself once and holds only real tools', () => {
+  const ticker = html.match(/<div class="ticker[^"]*"[^>]*>[\s\S]*?<\/div>/);
+  assert.ok(ticker, 'ticker is present');
+  assert.match(ticker[0], /^<div[^>]*aria-hidden="true"/, 'hidden from screen readers: the skills section says it all');
+  const groups = ticker[0].match(/<ul class="ticker-group">[\s\S]*?<\/ul>/g) || [];
+  assert.equal(groups.length, 2, 'two identical groups make the loop seamless');
+  assert.equal(toText(groups[0]), toText(groups[1]));
+  assert.doesNotMatch(ticker[0], /<a\b|<button/, 'nothing focusable inside a hidden region');
+  const skills = toText(html.replace(ticker[0], ''));
+  for (const item of groups[0].match(/<li>([^<]+)<\/li>/g).map((li) => toText(li))) {
+    assert.ok(skills.includes(item), `${item} appears elsewhere on the page`);
+  }
+});
+
+test('a scroll progress bar exists and is hidden from screen readers', () => {
+  assert.match(html, /<div class="scroll-progress" aria-hidden="true"><\/div>/);
+});
+
+test('section headings reveal on scroll, and award icons can draw themselves', () => {
+  const heads = html.match(/<header class="section-head[^"]*"/g) || [];
+  assert.ok(heads.length >= 5);
+  for (const head of heads) assert.match(head, /\breveal\b/);
+  const icons = html.match(/<svg class="award-icon"[\s\S]*?<\/svg>/g) || [];
+  assert.equal(icons.length, 3);
+  for (const icon of icons) {
+    for (const shape of icon.match(/<(path|circle)\b[^>]*>/g)) assert.match(shape, /pathLength="1"/);
+  }
+});
+
+test('every looping animation is switched off for visitors who ask for reduced motion', () => {
+  const from = css.indexOf('@media (prefers-reduced-motion: reduce)');
+  const reduced = css.slice(from, css.indexOf('@media print', from));
+  assert.ok(from !== -1 && reduced.length > 0);
+  assert.match(reduced, /animation:\s*none\s*!important/);
+  assert.match(reduced, /transition:\s*none\s*!important/);
+  assert.match(css, /animation:[^;]*infinite/, 'there are looping animations to switch off');
+  assert.match(reduced, /\.chips li[\s\S]*opacity:\s*1/, 'staggered chips are shown at once');
+});
+
+test('the page has its own typefaces rather than the system font alone', () => {
+  assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*Space\+Grotesk/);
+  assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*JetBrains\+Mono/);
+  assert.match(css, /--display:\s*"Space Grotesk"/);
+  assert.match(css, /--mono:\s*"JetBrains Mono"/);
+});

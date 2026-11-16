@@ -1,4 +1,5 @@
-/* Theme toggle, scroll reveal, current-section highlight and the bar's light/dark tone.
+/* Theme toggle, scroll reveal, count-up numbers, scroll progress, the pointer
+   glow on tiles, current-section highlight and the bar's light/dark tone.
    A classic script (not a module) so the page also works when opened straight
    from disk. The page is fully readable without it. */
 (function (root, factory) {
@@ -33,6 +34,49 @@
     return String(className).split(/\s+/).indexOf('tone-dark') !== -1 ? 'dark' : 'light';
   }
 
+
+  /* ---------- motion helpers (pure, tested in Node) ---------- */
+
+  /** Finds the first number in printed text: "9,994" → 9994, grouped, no decimals. */
+  function parseCount(text) {
+    var match = /\d[\d,]*(?:\.\d+)?/.exec(String(text));
+    if (!match) return null;
+    var raw = match[0];
+    var dot = raw.indexOf('.');
+    return {
+      value: Number(raw.replace(/,/g, '')),
+      decimals: dot === -1 ? 0 : raw.length - dot - 1,
+      grouped: raw.indexOf(',') !== -1,
+      before: text.slice(0, match.index),
+      after: text.slice(match.index + raw.length)
+    };
+  }
+
+  function formatCount(value, decimals, grouped) {
+    var parts = value.toFixed(decimals).split('.');
+    if (grouped) parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+  }
+
+  /** The text to show at `progress` (0 to 1) of a count-up; fast first, slow at the end. */
+  function countAt(parsed, progress) {
+    var t = Math.min(1, Math.max(0, progress));
+    var eased = 1 - Math.pow(1 - t, 4);
+    var value = t === 1 ? parsed.value : Math.min(parsed.value, parsed.value * eased);
+    return parsed.before + formatCount(value, parsed.decimals, parsed.grouped) + parsed.after;
+  }
+
+  /** How far down the page the visitor is, 0 to 1. */
+  function scrollProgress(scrollTop, scrollHeight, viewportHeight) {
+    var room = scrollHeight - viewportHeight;
+    if (room <= 0) return 0;
+    return Math.min(1, Math.max(0, scrollTop / room));
+  }
+
+  function prefersReducedMotion(win) {
+    return Boolean(win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
   function initTheme(doc, win) {
     var toggle = doc.getElementById('theme-toggle');
     if (!toggle) return;
@@ -65,6 +109,12 @@
 
   function initReveal(doc, win) {
     var items = Array.prototype.slice.call(doc.querySelectorAll('.reveal'));
+    // each skill chip waits a little longer than the one before it
+    Array.prototype.slice.call(doc.querySelectorAll('.specs .chips')).forEach(function (list) {
+      Array.prototype.slice.call(list.children).forEach(function (chip, i) {
+        chip.style.setProperty('--i', String(i));
+      });
+    });
     if (!('IntersectionObserver' in win)) {
       items.forEach(function (el) {
         el.classList.add('is-visible');
@@ -133,12 +183,110 @@
     });
   }
 
+  /* The four headline numbers count up from zero the first time they are seen.
+     The page already holds the final text, so nothing is lost without this. */
+  function initCountUp(doc, win) {
+    if (prefersReducedMotion(win) || !('IntersectionObserver' in win) || !win.requestAnimationFrame) return;
+    var DURATION = 1600;
+    var jobs = [];
+    Array.prototype.slice.call(doc.querySelectorAll('.highlights strong')).forEach(function (el) {
+      for (var node = el.firstChild; node; node = node.nextSibling) {
+        if (node.nodeType !== 3) continue;
+        var parsed = parseCount(node.nodeValue);
+        if (parsed) {
+          jobs.push({ el: el, node: node, parsed: parsed, final: node.nodeValue });
+          return;
+        }
+      }
+    });
+    if (!jobs.length) return;
+
+    function run(job) {
+      var start = null;
+      function frame(now) {
+        if (start === null) start = now;
+        var progress = (now - start) / DURATION;
+        if (progress >= 1) {
+          job.node.nodeValue = job.final;
+          return;
+        }
+        job.node.nodeValue = countAt(job.parsed, progress);
+        win.requestAnimationFrame(frame);
+      }
+      win.requestAnimationFrame(frame);
+      // a hidden tab pauses animation frames; never leave a half-counted number behind
+      win.setTimeout(function () {
+        job.node.nodeValue = job.final;
+      }, DURATION + 1200);
+    }
+
+    var observer = new win.IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          jobs.forEach(function (job) {
+            if (job.el === entry.target) run(job);
+          });
+        });
+      },
+      { threshold: 0.6 }
+    );
+    jobs.forEach(function (job) {
+      observer.observe(job.el);
+    });
+  }
+
+  /* A thin bar across the top that fills as the page is read. */
+  function initScrollProgress(doc, win) {
+    var bar = doc.querySelector('.scroll-progress');
+    if (!bar || !win.requestAnimationFrame) return;
+    var queued = false;
+    function paint() {
+      queued = false;
+      var el = doc.documentElement;
+      bar.style.setProperty('--progress', String(scrollProgress(win.scrollY || el.scrollTop, el.scrollHeight, win.innerHeight)));
+    }
+    function request() {
+      if (queued) return;
+      queued = true;
+      win.requestAnimationFrame(paint);
+    }
+    win.addEventListener('scroll', request, { passive: true });
+    win.addEventListener('resize', request);
+    paint();
+  }
+
+  /* A soft light follows the pointer across tiles and contact cards. */
+  function initSpotlight(doc, win) {
+    if (!win.matchMedia || !win.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    Array.prototype.slice.call(doc.querySelectorAll('.tile, .contact-list a')).forEach(function (el) {
+      el.addEventListener('pointermove', function (event) {
+        var box = el.getBoundingClientRect();
+        el.style.setProperty('--mx', event.clientX - box.left + 'px');
+        el.style.setProperty('--my', event.clientY - box.top + 'px');
+      });
+    });
+  }
+
   function init(doc, win) {
     initTheme(doc, win);
     initReveal(doc, win);
+    initCountUp(doc, win);
+    initScrollProgress(doc, win);
+    initSpotlight(doc, win);
     initSectionSpy(doc, win);
     initNavTone(doc, win);
   }
 
-  return { resolveTheme: resolveTheme, nextTheme: nextTheme, navTone: navTone, init: init };
+  return {
+    resolveTheme: resolveTheme,
+    nextTheme: nextTheme,
+    navTone: navTone,
+    parseCount: parseCount,
+    formatCount: formatCount,
+    countAt: countAt,
+    scrollProgress: scrollProgress,
+    init: init
+  };
 });
