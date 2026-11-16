@@ -1,10 +1,10 @@
 /* ==========================================================================
    Huseyn Maharramli · portfolio
 
-   A data poster: heavy Bricolage Grotesque capitals, JetBrains Mono labels,
-   graph-paper grids, ink outlines with hard offset shadows, and a yellow
-   highlighter. Four flat colours (blue, violet, pink, orange) mark things
-   out; blue and orange are the two classes in the picture at the top.
+   A calm, precise look for an engineer: Bricolage Grotesque headings in
+   sentence case, JetBrains Mono labels, hairline borders, soft shadows and a
+   faint graph-paper grid. Blue is the accent; violet, pink and orange appear
+   only as thin markers. Blue and orange are the two classes in the picture.
 
    Colour tokens live in the three blocks below. The two dark blocks must stay
    identical (the tests check this): the first follows the system setting, the
@@ -15,14 +15,14 @@
 :root {
   color-scheme: light;
   --bg: #ffffff;
-  --bg-alt: #eef0fb;
+  --bg-alt: #f5f6f9;
   --tile: #ffffff;
   --tile-alt: #ffffff;
   --text: #0b0b0f;
   --text-2: #3d3d4a;
   --text-3: #62627a;
-  --hairline: #c9cbdb;
-  --chip: #eef0fb;
+  --hairline: #dcdee8;
+  --chip: #eff0f5;
   --link: #2447ff;
   --grad-1: #2447ff;
   --grad-2: #7a3cf0;
@@ -33,10 +33,10 @@
   --mark-gray: #8e8e93;
   --track: #e6e8f0;
   --track-blue: #d9e7fc;
-  --edge: #0b0b0f;
-  --shadow: #0b0b0f;
-  --pop: #ffd60a;
-  --pop-ink: #0b0b0f;
+  --edge: #dcdee8;
+  --shadow: rgba(16, 20, 40, 0.14);
+  --pop: #2447ff;
+  --pop-ink: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -61,9 +61,9 @@
     --mark-gray: #7c7c82;
     --track: #26263a;
     --track-blue: #17304f;
-    --edge: #e6e6f0;
-    --shadow: #5b7cff;
-    --pop: #ffd60a;
+    --edge: #2c2c3a;
+    --shadow: rgba(0, 0, 0, 0.6);
+    --pop: #7c95ff;
     --pop-ink: #0b0b0f;
   }
 }
@@ -90,9 +90,9 @@
   --mark-gray: #7c7c82;
   --track: #26263a;
   --track-blue: #17304f;
-  --edge: #e6e6f0;
-  --shadow: #5b7cff;
-  --pop: #ffd60a;
+  --edge: #2c2c3a;
+  --shadow: rgba(0, 0, 0, 0.6);
+  --pop: #7c95ff;
   --pop-ink: #0b0b0f;
 }
 
@@ -112,7 +112,7 @@ html {
   --button-hover: #0862d0;
   --pad: clamp(20px, 5vw, 44px);
   --tile-pad: clamp(24px, 3.2vw, 40px);
-  --radius: 16px;
+  --radius: 18px;
   --nav-h: 48px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   scroll-behavior: smooth;
@@ -195,15 +195,21 @@ img {
   transform: none;
 }
 
-/* The highlighter: ink on a yellow stroke that draws itself in. */
+/* The accent: a thin underline that draws itself beneath the words. */
 .grad {
-  padding: 0 0.16em;
-  border-radius: 4px;
-  background: linear-gradient(var(--pop), var(--pop)) no-repeat 0 50% / 100% 100%;
+  padding-bottom: 0.04em;
+  background: linear-gradient(var(--pop), var(--pop)) no-repeat 0 100% / 100% 0.08em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-  color: var(--pop-ink);
-  animation: marker 0.9s var(--ease) 0.7s both;
+  animation: marker 1.1s var(--ease) 0.8s both;
+}
+
+/* in the small labels it is simply the accent colour */
+.eyebrow .grad {
+  padding: 0;
+  background: none;
+  color: var(--link);
+  animation: none;
 }
 
 .eyebrow {
@@ -464,7 +470,7 @@ img {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: calc(var(--nav-h) + clamp(64px, 9vw, 120px)) 0 clamp(64px, 6vw, 80px);
+  padding: calc(var(--nav-h) + clamp(64px, 9vw, 120px)) 0 clamp(44px, 4.5vw, 60px);
   background: var(--bg);
   color: var(--text);
   text-align: left;
@@ -1790,170 +1796,77 @@ h1 {
   border-left: 1px solid var(--hairline);
 }
 
-/* ---------- Poster skin ----------
-   Everything that makes the page a poster rather than a brochure: capitals,
-   ink outlines, hard shadows that grow on hover, graph paper, the highlighter.
-   It sits after the components so it can restyle them in one place. */
+/* ---------- Studio skin ----------
+   The finishing layer: hairline borders, soft shadows, thin colour markers and
+   the graph-paper grid. It sits after the components so the whole look can be
+   adjusted in one place. */
 
-main {
-  overflow-x: hidden;
-  overflow-x: clip; /* the tilted ticker pokes past both edges */
-}
-
-h1,
-h2 {
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-/* Graph paper behind the tinted and dark sections. */
+/* Graph paper, very faint, behind the tinted and dark sections. */
 .section-alt,
 .section.tone-dark {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--text) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--text) 6%, transparent) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--text) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--text) 4%, transparent) 1px, transparent 1px);
   background-size: 48px 48px;
-}
-
-/* Navigation */
-.site-header,
-.site-header[data-tone="light"] {
-  border: 2px solid var(--nav-ink);
-  border-radius: 14px;
-  box-shadow: 4px 4px 0 var(--nav-ink);
-  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
-}
-
-.site-header {
-  background: rgba(11, 11, 15, 0.84);
-}
-
-.site-header[data-tone="light"] {
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-}
-
-.site-nav .nav-cta,
-.site-nav .nav-cta:hover,
-.site-nav .nav-cta[aria-current] {
-  border: 1.5px solid #0b0b0f;
-  background: var(--pop);
-  color: #0b0b0f;
-}
-
-/* Buttons: a yellow key that presses down */
-.button {
-  border: 2px solid #0b0b0f;
-  border-radius: 10px;
-  background: var(--pop);
-  box-shadow: 4px 4px 0 var(--text);
-  color: var(--pop-ink);
-  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
-}
-
-.button:hover {
-  box-shadow: 7px 7px 0 var(--text);
-  transform: translate(-3px, -3px);
-}
-
-.button:active {
-  box-shadow: 0 0 0 var(--text);
-  transform: translate(4px, 4px);
 }
 
 /* Hero */
-.hero .wrap {
-  position: relative;
-}
-
 .hero::after {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
   background-size: 48px 48px;
-  -webkit-mask-image: linear-gradient(180deg, #000 25%, transparent 92%);
-  mask-image: linear-gradient(180deg, #000 25%, transparent 92%);
-  animation: grid-pan 14s linear infinite;
+  -webkit-mask-image: linear-gradient(180deg, #000 20%, transparent 90%);
+  mask-image: linear-gradient(180deg, #000 20%, transparent 90%);
+  animation: grid-pan 40s linear infinite;
 }
 
-/* the job title is a sticker, stuck on slightly crooked */
+/* the job title: a quiet label with a live dot */
 .hero .eyebrow {
   display: inline-flex;
-  margin-bottom: clamp(20px, 2.6vw, 34px);
-  padding: 8px 14px;
-  border: 2px solid #0b0b0f;
-  border-radius: 8px;
-  background: var(--pop);
-  box-shadow: 4px 4px 0 var(--grad-4);
-  transform: rotate(-3deg);
+  gap: 10px;
+  margin-bottom: clamp(18px, 2.2vw, 28px);
+  padding: 7px 13px 7px 11px;
+  border: 1px solid var(--edge);
+  border-radius: 980px;
+  background: color-mix(in srgb, var(--tile) 70%, transparent);
+}
+
+.hero .eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--grad-4);
+  animation: breathe 2.4s ease-in-out infinite;
 }
 
 .hero .eyebrow .grad {
-  padding: 0;
-  background: none;
-  animation: none;
+  color: var(--text-2);
 }
 
 h1 {
-  font-size: clamp(2.5rem, 12.2vw, 10.25rem);
-  line-height: 0.86;
-  letter-spacing: -0.045em;
+  font-size: clamp(2.75rem, 8.6vw, 7.75rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
 }
 
+/* first name in full ink, surname a step back */
 .h1-last {
   display: block;
-  letter-spacing: -0.01em; /* room for the outline between letters */
-}
-
-/* The surname is an outline that fills with orange under the pointer. The
-   stroke is painted first and the fill over it, which hides the seams where
-   the letter shapes overlap. */
-@supports (-webkit-text-stroke: 1px #000) and (paint-order: stroke fill) {
-  .h1-last {
-    color: var(--bg);
-    -webkit-text-stroke: clamp(3px, 0.42vw, 6px) var(--text);
-    paint-order: stroke fill;
-    transition: color 0.5s ease, -webkit-text-stroke-color 0.5s ease;
-  }
-
-  h1:hover .h1-last {
-    color: var(--grad-4);
-    -webkit-text-stroke-color: var(--grad-4);
-  }
+  color: color-mix(in srgb, var(--text) 46%, transparent);
 }
 
 .hero-tagline {
-  margin-top: clamp(22px, 2.6vw, 36px);
+  margin-top: clamp(20px, 2.4vw, 32px);
 }
 
-/* a ring of text turning slowly beside the name */
-.spin-badge {
-  position: absolute;
-  top: -18px;
-  right: 0;
-  width: clamp(120px, 14vw, 176px);
-  height: auto;
-  overflow: visible;
-  animation: spin 22s linear infinite;
-}
-
-.spin-badge text {
-  fill: var(--text);
-  font-family: var(--mono);
-  font-size: 13.5px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-}
-
-.spin-star {
-  fill: var(--pop);
-}
-
-/* the illustration sits in a little window */
+/* the illustration sits in a window */
 .demo-window {
   overflow: hidden;
-  border: 2px solid var(--edge);
+  border: 1px solid var(--edge);
   border-radius: var(--radius);
-  box-shadow: 9px 9px 0 var(--grad-4);
+  box-shadow: 0 50px 130px -50px rgba(36, 124, 255, 0.4), 0 30px 110px -60px rgba(255, 122, 26, 0.34);
 }
 
 .demo-bar {
@@ -1961,27 +1874,18 @@ h1 {
   align-items: center;
   gap: 7px;
   padding: 10px 14px;
-  border-bottom: 2px solid var(--edge);
-  background: var(--tile);
-  color: var(--text-2);
+  border-bottom: 1px solid var(--edge);
+  background: var(--tile-alt);
+  color: var(--text-3);
   font-family: var(--mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.08em;
 }
 
 .demo-bar i {
-  width: 11px;
-  height: 11px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--grad-3);
-}
-
-.demo-bar i:nth-child(2) {
-  background: var(--pop);
-}
-
-.demo-bar i:nth-child(3) {
-  background: var(--grad-1);
+  background: var(--hairline);
 }
 
 .demo-bar span {
@@ -1996,9 +1900,9 @@ h1 {
   box-shadow: none;
 }
 
-/* Headline numbers: four cards, each with its own colour */
+/* Headline numbers: four cards, each with a thin line of its own colour */
 .highlights {
-  gap: 16px;
+  gap: 14px;
 }
 
 .highlights li,
@@ -2025,17 +1929,23 @@ h1 {
 
 .highlights a {
   height: 100%;
-  padding: 20px 20px 22px;
-  border: 2px solid var(--edge);
+  padding: 22px 20px;
+  border: 1px solid var(--edge);
   border-radius: 14px;
-  background: var(--tile-alt);
-  box-shadow: 5px 5px 0 var(--c);
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  background: color-mix(in srgb, var(--tile) 72%, transparent);
+  box-shadow: inset 0 2px 0 var(--c);
+  transition: transform 0.45s var(--ease), border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .highlights a:hover {
-  box-shadow: 9px 9px 0 var(--c);
-  transform: translate(-4px, -4px);
+  border-color: color-mix(in srgb, var(--c) 55%, var(--edge));
+  background: var(--tile);
+  transform: translateY(-4px);
+}
+
+.highlights li strong,
+.highlights li:nth-child(n) strong {
+  color: var(--text);
 }
 
 .highlights span {
@@ -2043,56 +1953,29 @@ h1 {
   padding-right: 0;
 }
 
-/* Ticker: a strip of yellow tape across the page, slightly off level */
+/* Ticker: quiet, level, part of the hero */
 .ticker {
-  position: relative;
-  z-index: 2;
-  margin-block: -26px;
-  padding: 15px 0;
-  border-block: 2px solid #0b0b0f;
-  background: var(--pop);
-  color: #0b0b0f;
-  -webkit-mask-image: none;
-  mask-image: none;
-  transform: rotate(-1.4deg) scale(1.04);
+  padding: 18px 0;
+  color: var(--text-3);
 }
 
 .ticker-group li {
-  font-weight: 800;
-  text-transform: uppercase;
+  font-size: clamp(1rem, 0.85rem + 0.6vw, 1.3125rem);
 }
 
 .ticker-group li::after,
 .ticker-group li:nth-child(n)::after {
-  background: #0b0b0f;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--hairline);
+  transform: none;
 }
 
-/* Section labels and headings */
-.section .eyebrow::after {
-  height: 2px;
-  background: var(--text);
-}
-
-.section h2 {
-  font-size: clamp(2.25rem, 1rem + 5vw, 4.75rem);
-  line-height: 0.95;
-  letter-spacing: -0.035em;
-}
-
-.section-contact h2 {
-  font-size: clamp(3rem, 1rem + 9vw, 8.5rem);
-  line-height: 0.9;
-}
-
-/* Tiles: ink outline, hard shadow in the tile's own colour */
+/* Tiles: hairline outline, soft shadow, a colour that shows on hover */
 .tile {
-  border: 2px solid var(--edge);
-  box-shadow: 6px 6px 0 var(--tile-c, var(--shadow));
-}
-
-/* they arrive a little crooked and straighten up */
-.js .tile.reveal {
-  transform: translateY(40px) rotate(-1.6deg);
+  border: 1px solid var(--edge);
+  box-shadow: 0 1px 2px var(--shadow), 0 16px 40px -30px var(--shadow);
 }
 
 .bento > :nth-child(1),
@@ -2114,62 +1997,20 @@ h1 {
   --tile-c: var(--grad-4);
 }
 
-.tile-game,
-.section-alt .tile-game {
-  border-color: #0b0b0f;
-  background: #0b0b0f;
-}
-
 .chips li {
-  border: 1.5px solid var(--edge);
-  border-radius: 6px;
-  background: var(--tile);
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.chips li:hover {
-  border-color: var(--edge);
-  background: var(--pop);
-  color: var(--pop-ink);
-}
-
-.meter-bar,
-.meter-fill {
-  height: 10px;
-}
-
-.meter-fill {
-  height: auto;
+  transition: border-color 0.2s ease;
 }
 
 /* Contact cards */
-.contact-list li:nth-child(1) {
-  --c: var(--grad-1);
-}
-
-.contact-list li:nth-child(2) {
-  --c: var(--grad-3);
-}
-
-.contact-list li:nth-child(3) {
-  --c: var(--grad-4);
-}
-
 .contact-list a {
-  border: 2px solid var(--edge);
-  background: var(--tile);
-  box-shadow: 6px 6px 0 var(--c);
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  border: 1px solid var(--edge);
+  background: color-mix(in srgb, var(--tile) 80%, transparent);
+  box-shadow: none;
 }
 
 .contact-list a:hover {
+  border-color: color-mix(in srgb, var(--link) 55%, var(--edge));
   background: var(--tile);
-  box-shadow: 11px 11px 0 var(--c);
-  transform: translate(-5px, -5px);
-}
-
-.scroll-progress {
-  height: 4px;
 }
 
 /* ---------- Motion ---------- */
@@ -2211,13 +2052,7 @@ h1 {
 
 @keyframes marker {
   from {
-    background-size: 0% 100%;
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+    background-size: 0% 0.08em;
   }
 }
 
@@ -2349,13 +2184,14 @@ h1 {
    the same element can both arrive and respond. */
 .js .tile.reveal.is-visible,
 .tile {
-  transition: opacity 0.9s var(--ease), transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  transition: opacity 0.9s var(--ease), transform 0.45s var(--ease), border-color 0.3s ease, box-shadow 0.45s var(--ease);
 }
 
 .project.tile:hover,
 .award.tile:hover {
-  box-shadow: 11px 11px 0 var(--tile-c, var(--shadow));
-  transform: translate(-5px, -5px);
+  border-color: color-mix(in srgb, var(--tile-c, var(--link)) 55%, var(--edge));
+  box-shadow: 0 1px 2px var(--shadow), 0 28px 56px -28px var(--shadow);
+  transform: translateY(-4px);
 }
 
 /* The line beside each section label grows out from the label. */
@@ -2426,7 +2262,6 @@ h1 {
   }
 
   .js .reveal,
-  .js .tile.reveal,
   .js .reveal .meter-fill,
   .js .reveal .eyebrow::after,
   .js .specs .reveal .chips li {
@@ -2465,14 +2300,12 @@ h1 {
   .site-header,
   .skip-link,
   .scroll-progress,
-  .spin-badge,
   .ticker,
   .demo-hud {
     display: none !important;
   }
 
   .js .reveal,
-  .js .tile.reveal,
   .js .reveal .meter-fill,
   .js .specs .reveal .chips li {
     opacity: 1 !important;
@@ -2548,8 +2381,7 @@ h1 {
     --radius: 14px;
   }
 
-  .nav-about,
-  .spin-badge {
+  .nav-about {
     display: none;
   }
 
@@ -2675,7 +2507,7 @@ h1 {
   }
 }
 
-/* ---------- Poster skin, small screens ---------- */
+/* ---------- Studio skin, small screens ---------- */
 
 @media (max-width: 1000px) {
   /* three cards cannot hold an email address side by side here */
@@ -2690,24 +2522,14 @@ h1 {
 
 @media (max-width: 760px) {
   .highlights {
-    gap: 14px;
+    gap: 12px;
   }
 
   .highlights a {
-    padding: 16px 14px 18px;
+    padding: 18px 14px;
   }
 
   .highlights span {
     font-size: 0.875rem;
-  }
-
-  .ticker {
-    margin-block: -18px;
-    padding: 11px 0;
-  }
-
-  .tile,
-  .contact-list a {
-    box-shadow: 4px 4px 0 var(--tile-c, var(--c, var(--shadow)));
   }
 }

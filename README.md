@@ -13,24 +13,22 @@ One static page. There is no build step and nothing to install.
 
 ## The design
 
-The page is styled as a data poster.
+A calm, precise look for an engineer.
 
-- **Type**: Bricolage Grotesque in heavy capitals for the name and section headings, Inter for text, JetBrains Mono for small labels.
-- **Outlines and shadows**: tiles, cards and buttons have an ink outline and a hard offset shadow in their own colour; the shadow grows when you hover.
-- **Colour**: four flat colours (blue, violet, pink, orange) plus a yellow highlighter, used for the "AI Engineer" sticker, the highlighted words, the buttons and the tools strip.
-- **Graph paper**: a faint grid sits behind the hero and the tinted and dark sections.
+- **Type**: Bricolage Grotesque for the name and headings (sentence case), Inter for text, JetBrains Mono for small labels.
+- **Surfaces**: hairline borders and soft shadows. A faint graph-paper grid sits behind the hero and the tinted and dark sections.
+- **Colour**: blue is the accent. Violet, pink and orange appear only as thin markers, for example the line on top of each headline number.
 - **Sections** alternate light and dark. A section with the class `tone-dark` (hero, journey, contact) is dark in both themes; the rest follow the visitor's theme.
-- **Navigation** floats as an outlined bar and switches tone with the section under it.
-- All of this lives in one block of `styles.css`, under the comment "Poster skin".
+- **Navigation** floats as a glass bar and switches tone with the section under it.
+- The finishing layer lives in one block of `styles.css`, under the comment "Studio skin".
 - **The picture at the top** is a real model running in the browser: 1,000 small decision trees, each trained on 100 random points from a synthetic two-class dataset, voting on every part of the image. It illustrates the ensemble project; it is not that project's data or results, and the caption and footnote say so.
 
 ## Motion
 
-- The name comes into focus and its outlined second line fills with orange under the pointer; a ring of text turns beside it; the grid behind drifts.
-- The yellow highlighter draws itself across highlighted words.
-- A tilted strip of tools scrolls under the hero (`.ticker`). It holds two identical lists so the loop has no seam; edit both.
-- The four headline numbers count up from zero; a bar along the top shows how far down the page you are.
-- Tiles arrive slightly crooked and straighten; on hover they shift and their shadow grows. Buttons press down.
+- The name comes into focus, the grid behind it drifts slowly, and a thin underline draws itself under the highlighted words.
+- A quiet strip of tools scrolls under the hero (`.ticker`). It holds two identical lists so the loop has no seam; edit both.
+- The four headline numbers count up from zero; a thin bar along the top shows how far down the page you are.
+- Tiles and cards lift slightly on hover and their border takes a colour.
 - Skill chips arrive one by one; award icons draw their outline.
 - On the Erasmus tile the route draws itself, each city pulses, and a point of light travels from Baku to Kaunas.
 - Visitors who ask their device for reduced motion get none of this, and the page reads the same without JavaScript.
@@ -42,7 +40,7 @@ The page is styled as a data poster.
 - **A chart bar** is one `<li class="meter">`. Its `data-value`, `data-max`, bar width (`--v`, which is value ÷ max × 100) and printed number must agree. The tests fail if they don't.
 - **A new project** is a copy of an `<article class="project tile …">` block with a new `id`. `tile-7` and `tile-5` set how wide it is in the 12-column grid.
 
-- **After changing `styles.css` or a script**, raise the number in `?v=3` on all four links at the top of `index.html`. Browsers keep old copies for a while; a new number makes them fetch the new files.
+- **After changing `styles.css` or a script**, raise the number in `?v=4` on all four links at the top of `index.html`. Browsers keep old copies for a while; a new number makes them fetch the new files.
 
 ## Test it
 

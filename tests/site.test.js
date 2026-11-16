@@ -436,7 +436,7 @@ test('the page has its own typefaces rather than the system font alone', () => {
 
 // ---------------------------------- poster ----------------------------------
 
-test('the poster colours exist in the light theme and in both dark blocks', () => {
+test('the skin colours exist in the light theme and in both dark blocks', () => {
   for (const selector of [':root {', ':root:not([data-theme="light"])', ':root[data-theme="dark"]']) {
     const names = declarations(blockAfter(css, selector)).map((d) => d.split(':')[0]);
     for (const token of ['--edge', '--shadow', '--pop', '--pop-ink']) {
@@ -445,16 +445,12 @@ test('the poster colours exist in the light theme and in both dark blocks', () =
   }
 });
 
-test('hero decorations are hidden from screen readers and hold nothing focusable', () => {
-  const badge = html.match(/<svg class="spin-badge"[\s\S]*?<\/svg>/);
-  assert.ok(badge, 'spinning badge is present');
-  assert.match(badge[0], /^<svg[^>]*aria-hidden="true"/);
-  const words = toText(badge[0]);
-  for (const claim of ['MACHINE LEARNING', 'DATA SCIENCE']) assert.ok(words.includes(claim));
+test('the illustration window bar is decorative and the page has no novelty badge', () => {
   const bar = html.match(/<div class="demo-bar"[^>]*>[\s\S]*?<\/div>/);
   assert.ok(bar, 'the illustration has a window bar');
   assert.match(bar[0], /^<div[^>]*aria-hidden="true"/);
-  assert.doesNotMatch(badge[0] + bar[0], /<a\b|<button/);
+  assert.doesNotMatch(bar[0], /<a\b|<button/);
+  assert.doesNotMatch(html + css, /spin-badge/);
 });
 
 test('the name is split for styling but still reads as one name', () => {
@@ -463,9 +459,11 @@ test('the name is split for styling but still reads as one name', () => {
   assert.equal(toText(h1), 'Huseyn Maharramli');
 });
 
-test('tiles that arrive tilted are straightened for reduced motion', () => {
-  const from = css.indexOf('@media (prefers-reduced-motion: reduce)');
-  const reduced = css.slice(from, css.indexOf('@media print', from));
-  assert.match(css, /\.js \.tile\.reveal\s*\{[^}]*rotate/);
-  assert.match(reduced, /\.js \.tile\.reveal\b/);
+test('the professional skin keeps type in sentence case and things level', () => {
+  const from = css.indexOf('/* ---------- Studio skin');
+  assert.ok(from !== -1, 'the skin block is present');
+  const skin = css.slice(from, css.indexOf('/* ---------- Motion ---------- */'));
+  assert.doesNotMatch(skin, /text-transform:\s*uppercase/);
+  assert.doesNotMatch(skin, /rotate\(/);
+  assert.doesNotMatch(css, /Poster skin/);
 });
