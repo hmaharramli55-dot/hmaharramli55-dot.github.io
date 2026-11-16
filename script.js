@@ -103,6 +103,31 @@
     return [point[0] * Math.cos(ay) + z * Math.sin(ay), y, -point[0] * Math.sin(ay) + z * Math.cos(ay)];
   }
 
+  /** A small neural network laid out in a unit cube: layers left to right,
+      each layer's neurons on a ring. Returns node positions and the links. */
+  function networkLayout(layers) {
+    var nodes = [];
+    var edges = [];
+    var starts = [];
+    layers.forEach(function (count, layer) {
+      starts.push(nodes.length);
+      var x = layers.length === 1 ? 0 : -1 + (2 * layer) / (layers.length - 1);
+      for (var i = 0; i < count; i += 1) {
+        var angle = (2 * Math.PI * i) / count + layer * 0.6;
+        var ring = count === 1 ? 0 : 0.62;
+        nodes.push([x, Math.sin(angle) * ring, Math.cos(angle) * ring]);
+      }
+    });
+    for (var l = 0; l + 1 < layers.length; l += 1) {
+      for (var a = 0; a < layers[l]; a += 1) {
+        for (var b = 0; b < layers[l + 1]; b += 1) {
+          edges.push([starts[l] + a, starts[l + 1] + b]);
+        }
+      }
+    }
+    return { nodes: nodes, edges: edges };
+  }
+
   function prefersReducedMotion(win) {
     return Boolean(win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
@@ -423,6 +448,131 @@
     }
   }
 
+  /* The workstation in the hero. The markup holds the objects; this adds the six
+     faces of each box, turns the scene with the pointer and draws the hologram. */
+  function initScene(doc, win) {
+    var scene = doc.querySelector('.scene');
+    var stage = scene && scene.querySelector('.scene-stage');
+    if (!stage) return;
+
+    Array.prototype.slice.call(scene.querySelectorAll('.cuboid')).forEach(function (box) {
+      ['front', 'back', 'left', 'right', 'top', 'bottom'].forEach(function (side) {
+        var face = doc.createElement('i');
+        face.className = 'f f-' + side;
+        box.appendChild(face);
+      });
+    });
+
+    var still = prefersReducedMotion(win);
+    var hero = scene.closest ? scene.closest('.hero') : null;
+    if (hero && !still && win.matchMedia && win.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      hero.addEventListener('pointermove', function (event) {
+        var box = scene.getBoundingClientRect();
+        var angles = tiltAngles((event.clientX - box.left) / box.width, (event.clientY - box.top) / box.height, 8);
+        stage.style.setProperty('--sx', (angles.rx * 0.6).toFixed(2));
+        stage.style.setProperty('--sy', (angles.ry * 1.6).toFixed(2));
+      });
+      hero.addEventListener('pointerleave', function () {
+        stage.style.removeProperty('--sx');
+        stage.style.removeProperty('--sy');
+      });
+    }
+
+    var canvas = scene.querySelector('.holo-net');
+    var ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+    if (!ctx || !win.requestAnimationFrame) return;
+
+    var net = networkLayout([3, 5, 5, 2]);
+    var size = canvas.width;
+    var pulses = [];
+    for (var p = 0; p < 9; p += 1) {
+      pulses.push({ edge: (p * 7) % net.edges.length, t: p / 9 });
+    }
+    var running = false;
+    var last = 0;
+    var turn = 0.5;
+
+    function place(point) {
+      var r = rotatePoint(point, 0.32, turn);
+      var scale = 1 / (1.9 - r[2] * 0.45); // nearer points are larger
+      return [size / 2 + r[0] * size * 0.52 * scale, size / 2 + r[1] * size * 0.52 * scale, (r[2] + 1) / 2];
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, size, size);
+      var at = net.nodes.map(place);
+      ctx.lineWidth = 1.2;
+      net.edges.forEach(function (edge) {
+        var a = at[edge[0]];
+        var b = at[edge[1]];
+        ctx.strokeStyle = 'rgba(120, 200, 255,' + (0.08 + 0.2 * (a[2] + b[2]) / 2).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.moveTo(a[0], a[1]);
+        ctx.lineTo(b[0], b[1]);
+        ctx.stroke();
+      });
+      pulses.forEach(function (pulse) {
+        var edge = net.edges[pulse.edge];
+        var a = at[edge[0]];
+        var b = at[edge[1]];
+        ctx.fillStyle = 'rgba(190, 240, 255, 0.95)';
+        ctx.beginPath();
+        ctx.arc(a[0] + (b[0] - a[0]) * pulse.t, a[1] + (b[1] - a[1]) * pulse.t, 2.6, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      at.forEach(function (n, i) {
+        var radius = 5 + 7 * n[2];
+        var glow = ctx.createRadialGradient(n[0], n[1], 0, n[0], n[1], radius * 3);
+        var tint = i % 3 === 0 ? '157, 140, 255' : '111, 227, 255';
+        glow.addColorStop(0, 'rgba(' + tint + ',' + (0.5 + 0.4 * n[2]).toFixed(2) + ')');
+        glow.addColorStop(1, 'rgba(' + tint + ', 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(n[0], n[1], radius * 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(235, 248, 255,' + (0.55 + 0.45 * n[2]).toFixed(2) + ')';
+        ctx.beginPath();
+        ctx.arc(n[0], n[1], radius * 0.45, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function frame(now) {
+      if (!running) return;
+      var dt = Math.min(64, now - (last || now));
+      last = now;
+      turn += dt * 0.00035;
+      pulses.forEach(function (pulse) {
+        pulse.t += dt * 0.0009;
+        if (pulse.t >= 1) {
+          pulse.t = 0;
+          pulse.edge = (pulse.edge + 11) % net.edges.length;
+        }
+      });
+      draw();
+      win.requestAnimationFrame(frame);
+    }
+
+    draw();
+    if (still) return;
+    if ('IntersectionObserver' in win) {
+      new win.IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting && !running) {
+            running = true;
+            last = 0;
+            win.requestAnimationFrame(frame);
+          } else if (!entry.isIntersecting) {
+            running = false;
+          }
+        });
+      }).observe(scene);
+    } else {
+      running = true;
+      win.requestAnimationFrame(frame);
+    }
+  }
+
   function init(doc, win) {
     initTheme(doc, win);
     initReveal(doc, win);
@@ -430,6 +580,7 @@
     initScrollProgress(doc, win);
     initSectionSpy(doc, win);
     initClock(doc, win);
+    initScene(doc, win);
     initTilt(doc, win);
     initGlobe(doc, win);
   }
@@ -445,6 +596,7 @@
     tiltAngles: tiltAngles,
     fibonacciSphere: fibonacciSphere,
     rotatePoint: rotatePoint,
+    networkLayout: networkLayout,
     init: init
   };
 });

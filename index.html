@@ -7,20 +7,20 @@
 <meta name="description" content="Portfolio of Huseyn Maharramli, a Computer Science student at ADA University working in machine learning and data science. Projects, results and experience.">
 <meta name="author" content="Huseyn Maharramli">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#0a0c0b">
+<meta name="theme-color" content="#0b0e14">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Huseyn Maharramli — AI Engineer">
 <meta property="og:description" content="Machine learning and data science projects with measured results, by a Computer Science student at ADA University.">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add("js")</script>
+<script>try{var t=localStorage.getItem("theme");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}document.documentElement.classList.add("js")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;family=Geist:wght@400..700&amp;family=Geist+Mono:wght@400..600&amp;display=swap">
-<link rel="stylesheet" href="styles.css?v=6">
-<script src="ensemble.js?v=6" defer></script>
-<script src="demo.js?v=6" defer></script>
-<script src="script.js?v=6" defer onerror="document.documentElement.classList.remove('js')"></script>
+<link rel="stylesheet" href="styles.css?v=8">
+<script src="ensemble.js?v=8" defer></script>
+<script src="demo.js?v=8" defer></script>
+<script src="script.js?v=8" defer onerror="document.documentElement.classList.remove('js')"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -69,10 +69,9 @@
         <p aria-hidden="true">Portfolio · 2026</p>
         <p aria-hidden="true">Baku · 40.41° N, 49.87° E</p>
       </div>
-      <h1 id="hero-title"><span class="h1-line">Huseyn</span> <span class="h1-line h1-last">Maharramli</span></h1>
-
       <div class="hero-grid">
       <div class="hero-copy">
+        <h1 id="hero-title"><span class="h1-line">Huseyn</span> <span class="h1-line h1-last">Maharramli</span></h1>
         <p class="hero-tagline">I like finding out what the data <em class="mark">actually shows</em>.</p>
         <p class="hero-sub">Computer Science at ADA University in Baku. Machine learning and data science.</p>
         <p class="actions">
@@ -81,6 +80,36 @@
         </p>
       </div>
 
+      <!-- A workstation drawn with CSS 3D. Decorative; script.js adds the box faces and the hologram. -->
+      <div class="scene" aria-hidden="true">
+        <div class="scene-stage">
+          <div class="scene-shadow"></div>
+          <div class="cuboid desk" style="--w:470px;--h:14px;--d:260px;--x:0px;--y:104px;--z:0px"></div>
+          <div class="scene-glow"></div>
+          <div class="cuboid kbd" style="--w:184px;--h:8px;--d:64px;--x:-52px;--y:93px;--z:74px"></div>
+          <div class="cuboid chip" style="--w:68px;--h:10px;--d:68px;--x:158px;--y:92px;--z:68px"></div>
+          <div class="layers"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i></div>
+          <div class="monitor">
+            <div class="monitor-bar"><i></i><i></i><i></i><span>ensemble.py</span></div>
+            <div class="code"><span><b>from</b> sklearn.tree <b>import</b> DecisionTreeClassifier</span><span>&nbsp;</span><span>forest = [fit_tree(sample(X, <u>100</u>))</span><span>          <b>for</b> _ <b>in</b> range(<u>1000</u>)]</span><span>votes = np.array([t.predict(X_test)</span><span>                  <b>for</b> t <b>in</b> forest])</span><span>y_hat = mode(votes, axis=<u>0</u>)</span><span>&nbsp;</span><span>accuracy(y_test, y_hat)  <em># 0.873</em></span></div>
+          </div>
+          <div class="holo">
+            <div class="holo-base"></div>
+            <div class="holo-beam"></div>
+            <canvas class="holo-net" width="480" height="480"></canvas>
+          </div>
+        </div>
+      </div><!-- /scene -->
+      </div>
+
+      <ul class="highlights">
+        <li><a href="#project-ensemble"><strong>87.3%</strong><span>Test accuracy when 1,000 small decision trees vote together.</span></a></li>
+        <li><a href="#project-regression"><strong><small>R²</small> 0.79</strong><span>From linear regression written from scratch in NumPy.</span></a></li>
+        <li><a href="#project-store"><strong>9,994</strong><span>Store orders analysed to show where discounts turn profit into loss.</span></a></li>
+        <li><a href="#project-ada-run"><strong>30</strong><span>ADA programmes, with courses and quizzes, inside a 3D browser game.</span></a></li>
+      </ul>
+
+      <div class="hero-live">
       <figure class="demo">
         <div class="demo-window tone-dark" data-tilt>
         <div class="demo-bar" aria-hidden="true"><span>Fig. 1</span><span>Majority vote, live</span></div>
@@ -98,13 +127,6 @@
         <figcaption>A live illustration of the idea behind my ensemble project, running in your browser. Small decision trees, each trained on 100 random points from a synthetic two-class dataset, vote on every part of the picture. Blue and orange are the two classes, and the colours blend where the vote is split.<span class="demo-hint"> Drag the slider to change how many trees vote.</span></figcaption>
       </figure>
       </div>
-
-      <ul class="highlights">
-        <li><a href="#project-ensemble"><strong>87.3%</strong><span>Test accuracy when 1,000 small decision trees vote together.</span></a></li>
-        <li><a href="#project-regression"><strong><small>R²</small> 0.79</strong><span>From linear regression written from scratch in NumPy.</span></a></li>
-        <li><a href="#project-store"><strong>9,994</strong><span>Store orders analysed to show where discounts turn profit into loss.</span></a></li>
-        <li><a href="#project-ada-run"><strong>30</strong><span>ADA programmes, with courses and quizzes, inside a 3D browser game.</span></a></li>
-      </ul>
     </div>
   </section>
 
@@ -175,7 +197,7 @@
       <header class="section-head reveal">
         <p class="eyebrow">Work</p>
         <h2 id="projects-title">Selected work.</h2>
-        <p class="section-intro">Five projects and a four-week internship track. Each one starts with a question and reports what the numbers said.</p>
+        <p class="section-intro">Six projects and a four-week internship track. Each one starts with a question and reports what the numbers said.</p>
       </header>
       <div class="section-body">
 
@@ -351,6 +373,34 @@
           <p class="case-links"><a class="link-chevron" href="https://github.com/hmaharramli55-dot/Supervised-Learning-Model-with-Scikit-learn-" target="_blank" rel="noopener">Notebook on GitHub</a></p>
         </article>
 
+        <article class="project case reveal" id="project-baku-homes">
+          <p class="case-no" aria-hidden="true">P/06</p>
+          <p class="case-meta"><span class="badge badge-upcoming">In progress</span> Machine Learning course · Class competition · 2026</p>
+          <h3>Baku Apartment Price Prediction</h3>
+          <p class="question">What is an apartment in Baku worth, judging only by its listing?</p>
+          <p class="finding">A price model for 69,315 apartment listings from Baku, Sumqayit and Xirdalan, used to predict 20,000 listings with the price removed. It reads the numbers, the map position and the words of each advert. I'll add the score here once the competition is scored.</p>
+          <figure class="fig" data-tilt>
+            <figcaption>The pipeline, in order</figcaption>
+            <ol class="steps">
+              <li><strong>Clean</strong><span>Parse areas and floors, drop impossible prices from the training data only.</span></li>
+              <li><strong>Locate</strong><span>Distance to Fountain Square and to nearby points of interest.</span></li>
+              <li><strong>Read</strong><span>A TF-IDF text model on the title, address and description.</span></li>
+              <li><strong>Compare</strong><span>Average price per m² of the nearest listings on the map.</span></li>
+              <li><strong>Blend</strong><span>LightGBM and XGBoost on log-price, weighted on held-out predictions.</span></li>
+            </ol>
+          </figure>
+          <details class="more">
+            <summary>How I did it</summary>
+            <div class="more-body">
+              <p>The target is the logarithm of the price, so a mistake on a cheap flat counts as much as one on an expensive flat. Features include area per room, the floor as a share of the building's height, and whether the seller is the owner or an agent.</p>
+              <p>The text model and the nearest-neighbour prices are added as out-of-fold features: each listing gets a value from a model that never saw it, so the final model cannot cheat. LightGBM is tuned with a short random search and everything is scored with 5-fold cross-validation.</p>
+              <ul class="chips" aria-label="Tools used">
+                <li>Python</li><li>LightGBM</li><li>XGBoost</li><li>scikit-learn</li><li>pandas</li><li>NumPy</li><li>SciPy</li>
+              </ul>
+            </div>
+          </details>
+        </article>
+
         <div class="track-block reveal">
           <p class="case-meta">DevJoint internship · Summer 2026</p>
           <h3>Four weeks, four deliverables</h3>
@@ -483,13 +533,13 @@
         <div class="reveal">
           <dt>Machine learning</dt>
           <dd><ul class="chips">
-            <li>scikit-learn</li><li>Regression</li><li>Classification</li><li>Decision Trees</li><li>Random Forest</li><li>Gradient Boosting</li><li>Ensemble Methods</li><li>Linear &amp; Logistic Regression from Scratch</li><li>Gradient Descent</li><li>Normal Equation</li><li>Feature Engineering</li><li>Feature Scaling</li><li>One-hot Encoding</li><li>Pipelines &amp; ColumnTransformer</li><li>Train/Test Splitting</li><li>Cross-Validation</li><li>Hyperparameter Tuning (GridSearchCV)</li><li>RandomizedSearchCV</li><li>Model Comparison &amp; Selection</li><li>RMSE, MAE, R² &amp; Accuracy</li>
+            <li>scikit-learn</li><li>Regression</li><li>Classification</li><li>Decision Trees</li><li>Random Forest</li><li>Gradient Boosting</li><li>LightGBM</li><li>XGBoost</li><li>Model Blending</li><li>Out-of-fold Stacking</li><li>Ensemble Methods</li><li>Linear &amp; Logistic Regression from Scratch</li><li>Gradient Descent</li><li>Normal Equation</li><li>Feature Engineering</li><li>Feature Scaling</li><li>One-hot Encoding</li><li>Pipelines &amp; ColumnTransformer</li><li>Train/Test Splitting</li><li>Cross-Validation</li><li>Hyperparameter Tuning (GridSearchCV)</li><li>RandomizedSearchCV</li><li>Model Comparison &amp; Selection</li><li>RMSE, MAE, R² &amp; Accuracy</li>
           </ul></dd>
         </div>
         <div class="reveal">
           <dt>Data analysis</dt>
           <dd><ul class="chips">
-            <li>pandas</li><li>NumPy</li><li>Data Cleaning</li><li>Missing Value &amp; Outlier Handling</li><li>Exploratory Data Analysis (EDA)</li><li>GroupBy &amp; Aggregation</li><li>Z-score Outlier Detection</li><li>Array Operations</li>
+            <li>pandas</li><li>NumPy</li><li>Data Cleaning</li><li>Missing Value &amp; Outlier Handling</li><li>Exploratory Data Analysis (EDA)</li><li>GroupBy &amp; Aggregation</li><li>Z-score Outlier Detection</li><li>Array Operations</li><li>TF-IDF Text Features</li><li>Geospatial Features</li>
           </ul></dd>
         </div>
         <div class="reveal">

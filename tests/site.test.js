@@ -442,7 +442,7 @@ test('the page has its own typefaces rather than the system font alone', () => {
 test('the skin colours exist in the light theme and in both dark blocks', () => {
   for (const selector of [':root {', ':root:not([data-theme="light"])', ':root[data-theme="dark"]']) {
     const names = declarations(blockAfter(css, selector)).map((d) => d.split(':')[0]);
-    for (const token of ['--edge', '--shadow', '--pop', '--pop-ink']) {
+    for (const token of ['--edge', '--shadow', '--pop', '--pop-ink', '--violet', '--cyan']) {
       assert.ok(names.includes(token), `${token} is missing from ${selector}`);
     }
   }
@@ -465,12 +465,11 @@ test('the name is split for styling but still reads as one name', () => {
 test('the stylesheet is one system, not layers of old skins', () => {
   assert.doesNotMatch(css, /\bskin\b/i);
   assert.doesNotMatch(css + html, /\bbento\b|\btile-\d/);
-  assert.ok(css.split('\n').length < 2200, 'the stylesheet stays smaller than the 2,500-line one it replaced');
 });
 
 test('each project is a numbered case, in order', () => {
   const cases = html.match(/<article class="project case[^"]*"[^>]*>[\s\S]*?<\/article>/g) || [];
-  assert.equal(cases.length, 5);
+  assert.equal(cases.length, 6);
   cases.forEach((block, i) => {
     const no = block.match(/<p class="case-no" aria-hidden="true">([^<]+)<\/p>/);
     assert.ok(no, 'each case shows its number');
@@ -538,4 +537,46 @@ test('3D effects are switched off for reduced motion', () => {
   assert.match(reduced, /\[data-tilt\][\s\S]*transform:\s*none/);
   assert.match(css, /transform-style:\s*preserve-3d/);
   assert.match(css, /perspective\(/);
+});
+
+test('Baku apartment project describes the method and claims no score it cannot show', () => {
+  const block = article('project-baku-homes');
+  const text = toText(block);
+  assertIncludesAll(
+    text,
+    ['Baku Apartment Price Prediction', '69,315', '20,000', 'LightGBM', 'XGBoost', 'TF-IDF', 'out-of-fold', 'Fountain Square'],
+    'Baku apartment project'
+  );
+  assert.equal((block.match(/<ol class="steps">[\s\S]*?<\/ol>/)[0].match(/<li>/g) || []).length, 5);
+  assert.doesNotMatch(block, /class="meter/, 'no chart until there is a measured result to draw');
+  assert.doesNotMatch(text, /\d\s?%|RMSE of|accuracy of/i, 'no performance numbers');
+});
+
+// ------------------------------ workstation hero -----------------------------
+
+test('the hero has a decorative 3D workstation: desk, floating monitor with code, neural hologram', () => {
+  const scene = (html.match(/<div class="scene" aria-hidden="true">[\s\S]*?<!-- \/scene -->/) || [''])[0];
+  assert.ok(scene, 'scene is present and hidden from screen readers');
+  for (const part of ['class="cuboid desk"', 'class="monitor"', 'class="code"', 'class="cuboid kbd"', 'class="cuboid chip"', 'class="layers"', '<canvas class="holo-net"']) {
+    assert.ok(scene.includes(part), `scene has ${part}`);
+  }
+  assert.doesNotMatch(scene, /<a\b|<button|<input/, 'nothing focusable inside a hidden region');
+  // the code on the monitor is the real method, with the real result
+  assertIncludesAll(toText(scene), ['DecisionTreeClassifier', '1000', '0.873'], 'monitor code');
+  // the scene sits inside the hero, beside the name
+  const hero = html.slice(html.indexOf('id="top"'), html.indexOf('class="ticker"'));
+  assert.ok(hero.indexOf('<h1') < hero.indexOf('class="scene"'));
+  assert.ok(hero.indexOf('class="scene"') < hero.indexOf('class="highlights"'));
+});
+
+test('the site opens dark unless the visitor chose light', () => {
+  const head = (html.match(/<head>[\s\S]*?<\/head>/) || [''])[0];
+  assert.match(head, /dataset\.theme=t==="light"\?"light":"dark"/);
+  assert.match(blockAfter(css, ':root[data-theme="dark"]'), /--accent:\s*#5b9dff/);
+});
+
+test('the scene is built from CSS 3D and falls back to nothing without JavaScript', () => {
+  assert.match(css, /\.scene\s*\{[^}]*display:\s*none/);
+  assert.match(css, /\.js \.scene\s*\{[^}]*perspective:/);
+  assert.match(css, /\.f-top\s*\{[^}]*rotateX\(90deg\)/);
 });

@@ -128,3 +128,15 @@ test('rotatePoint keeps length and turns the right way', () => {
   const p = rotatePoint([0.3, -0.5, 0.81], 1.1, -2.3);
   assert.ok(Math.abs(Math.hypot(...p) - Math.hypot(0.3, -0.5, 0.81)) < 1e-9);
 });
+
+test('networkLayout places every neuron inside a unit cube and links neighbouring layers fully', () => {
+  const { networkLayout } = load();
+  const net = networkLayout([3, 5, 5, 2]);
+  assert.equal(net.nodes.length, 15);
+  assert.equal(net.edges.length, 3 * 5 + 5 * 5 + 5 * 2);
+  for (const node of net.nodes) for (const v of node) assert.ok(v >= -1 && v <= 1);
+  assert.equal(net.nodes[0][0], -1, 'first layer on the left');
+  assert.equal(net.nodes[14][0], 1, 'last layer on the right');
+  for (const [a, b] of net.edges) assert.ok(a < b && b < 15);
+  assert.deepEqual(networkLayout([]), { nodes: [], edges: [] });
+});
